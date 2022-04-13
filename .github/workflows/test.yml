@@ -1,0 +1,30 @@
+name: "Test"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+    steps:
+      - name: Chackout
+        uses: actions/checkout@v2
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            .build/artifacts
+            .build/checkouts
+            .build/repositories
+          key: ${{ runner.os }}-dependencies-${{ matrix.xcode }}-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-dependencies-${{ matrix.xcode }}-${{ hashFiles('**/Package.resolved') }}
+            ${{ runner.os }}-dependencies-${{ matrix.xcode }}-
+      - name: Test
+        run: swift test
+
