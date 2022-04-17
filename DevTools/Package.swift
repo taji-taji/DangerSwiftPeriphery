@@ -11,7 +11,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: ".."),
-        .package(url: "https://github.com/peripheryapp/periphery", from: "2.0.0")
+        .package(url: "https://github.com/peripheryapp/periphery", branch: "master")
     ],
     targets: [
         .target(name: "DangerSwiftPeripheryDevTools",

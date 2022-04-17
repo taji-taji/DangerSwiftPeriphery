@@ -41,9 +41,9 @@
         "package": "Periphery",
         "repositoryURL": "https://github.com/peripheryapp/periphery",
         "state": {
-          "branch": null,
-          "revision": "1e28609c42939c37d45fbd6b534247283266ecb2",
-          "version": "2.8.6"
+          "branch": "master",
+          "revision": "48f3e9ba6f85fc09bc16130a8b270979cb3d23c3",
+          "version": null
         }
       },
       {
@@ -93,11 +93,11 @@
       },
       {
         "package": "SwiftSyntax",
-        "repositoryURL": "https://github.com/apple/swift-syntax",
+        "repositoryURL": "https://github.com/peripheryapp/swift-syntax",
         "state": {
           "branch": null,
-          "revision": "75e60475d9d8fd5bbc16a12e0eaa2cb01b0c322e",
-          "version": "0.50500.0"
+          "revision": "8a82bdb5d1558d130f732ef9f27dc1cd6f6696ea",
+          "version": "0.50600.1-static"
         }
       },
       {

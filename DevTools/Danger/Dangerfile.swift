@@ -1,4 +1,4 @@
 import Danger
 import DangerSwiftPeriphery
 
-DangerPeriphery.scan()
+DangerPeriphery.scan(peripheryPath: "swift run -c release --package-path=DevTools periphery")
