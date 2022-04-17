@@ -31,5 +31,5 @@ jobs:
       - name: Install Danger JS
         run: npm install -g danger
       - name: Run Danger
-        run: swift run danger-swift ci
+        run: swift run danger-swift ci --dangerfile=DevTools/Danger/Dangerfile.swift
 
