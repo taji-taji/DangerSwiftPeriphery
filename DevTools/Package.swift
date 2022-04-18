@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "DangerSwiftPeripheryDevTools",
     products: [
-        .library(name: "DangerSwiftPeripheryDevTools",
+        .library(name: "DangerDeps[DangerSwiftPeripheryDevTools]",
                  type: .dynamic,
                  targets: ["DangerSwiftPeripheryDevTools"]),
     ],
