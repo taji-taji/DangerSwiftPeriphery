@@ -60,7 +60,7 @@ public struct DangerPeriphery {
                     return false
                 case let .modified(hunks):
                     return hunks.contains(where: {
-                        let lineRange = ($0.newLineStart ..< $0.newLineSpan - $0.newLineStart)
+                        let lineRange = ($0.newLineStart ..< $0.newLineStart + $0.newLineSpan)
                         if lineRange.contains(violation.line) {
                             return true
                         }
