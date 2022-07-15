@@ -6,8 +6,7 @@ final class DangerSwiftPeripheryTests: XCTestCase {
     func testScanErrorOccuredWhileScanning() throws {
         let scanExecutor = ErrorScanExecutor(errorMessage: "test error")
         let result = DangerPeriphery.scan(scanExecutor: scanExecutor,
-                                          currentPathProvider: DefaultCurrentPathProvider(),
-                                          outputParser: CheckstyleOutputParser(),
+                                          outputParser: CheckstyleOutputParser(projectRootPath: DefaultCurrentPathProvider().currentPath),
                                           diffProvider: DiffProviderMock(result: .failure(TestError.scanError(messege: ""))))
         switch result {
         case .success:

@@ -12,7 +12,7 @@ final class CheckstyleOutputParserTests: XCTestCase {
     private var outputParser: CheckstyleOutputParser!
     
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        outputParser = CheckstyleOutputParser(projectRootPath: "/path/to")
     }
 
     override func tearDownWithError() throws {
@@ -32,10 +32,9 @@ final class CheckstyleOutputParserTests: XCTestCase {
             </file>
         </checkstyle>
         """
-        
-        outputParser = CheckstyleOutputParser()
+
         do {
-            let violations = try outputParser.parse(xml: xmlString, projectRootPath: "/path/to")
+            let violations = try outputParser.parse(xml: xmlString)
             
             XCTAssertEqual(violations.count, 3)
             XCTAssertEqual(violations[0].filePath, "file1")
@@ -62,10 +61,9 @@ final class CheckstyleOutputParserTests: XCTestCase {
             </file>
         </test>
         """
-        
-        outputParser = CheckstyleOutputParser()
+
         do {
-            _ = try outputParser.parse(xml: xmlString, projectRootPath: "/path/to")
+            _ = try outputParser.parse(xml: xmlString)
             
             XCTFail("parse must fail")
         } catch let error as CheckstyleOutputParser.Error {
