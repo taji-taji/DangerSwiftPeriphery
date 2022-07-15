@@ -15,11 +15,12 @@ public struct DangerPeriphery {
                                                          additionalArguments: arguments)
         let scanExecutor = PeripheryScanExecutor(commandBuilder: commandBuilder)
         let diffProvider = PullRequestDiffProvider(dangerDSL: Danger())
+        let currentPathProvider = DefaultCurrentPathProvider()
+        let outputParser = CheckstyleOutputParser(projectRootPath: currentPathProvider.currentPath)
         
         // execute scan
         let result = self.scan(scanExecutor: scanExecutor,
-                               currentPathProvider: DefaultCurrentPathProvider(),
-                               outputParser: CheckstyleOutputParser(),
+                               outputParser: outputParser,
                                diffProvider: diffProvider)
         
         // handle scan result
@@ -36,17 +37,14 @@ public struct DangerPeriphery {
     }
     
     static func scan<PSE: PeripheryScanExecutable,
-                     CPP: CurrentPathProvider,
                      OP: CheckstyleOutputParsable,
                      DP: PullRequestDiffProvidable>(
                         scanExecutor: PSE,
-                        currentPathProvider: CPP,
                         outputParser: OP,
                         diffProvider: DP) -> Result<[Violation], Error> {
         do {
             let output = try scanExecutor.execute()
-            let allViolations = try outputParser.parse(xml: output,
-                                                       projectRootPath: currentPathProvider.currentPath)
+            let allViolations = try outputParser.parse(xml: output)
             let violationsForComment = allViolations.filter({ violation -> Bool in
                 let result = diffProvider.diff(forFile: violation.filePath)
                 guard let changes = try? result.get() else {

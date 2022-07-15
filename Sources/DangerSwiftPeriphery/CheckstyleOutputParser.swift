@@ -8,11 +8,19 @@
 import Foundation
 
 protocol CheckstyleOutputParsable {
-    func parse(xml: String, projectRootPath: String) throws -> [Violation]
+    init(projectRootPath: String)
+
+    func parse(xml: String) throws -> [Violation]
 }
 
 struct CheckstyleOutputParser: CheckstyleOutputParsable {
-    func parse(xml: String, projectRootPath: String) throws -> [Violation] {
+    private let projectRootPath: String
+
+    init(projectRootPath: String) {
+        self.projectRootPath = projectRootPath
+    }
+
+    func parse(xml: String) throws -> [Violation] {
         let xmlDocument = try XMLDocument(xmlString: xml, options: [])
         guard let rootElement = xmlDocument.rootElement(),
               rootElement.name == "checkstyle" else {
