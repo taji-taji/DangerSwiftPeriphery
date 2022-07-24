@@ -3,14 +3,14 @@ import Danger
 @testable import DangerSwiftPeriphery
 
 final class DangerSwiftPeripheryTests: XCTestCase {
-    func testScanErrorOccuredWhileScanning() throws {
+    func testScanErrorOccurredWhileScanning() throws {
         let scanExecutor = PeripheryScanExecutableMock()
         scanExecutor.executeHandler = {
-            throw TestError.scanError(messege: "test error")
+            throw TestError.scanError(message: "test error")
         }
         let result = DangerPeriphery.scan(scanExecutor: scanExecutor,
                                           outputParser: CheckstyleOutputParser(projectRootPath: DefaultCurrentPathProvider().currentPath),
-                                          diffProvider: DiffProviderMock(result: .failure(TestError.scanError(messege: ""))))
+                                          diffProvider: DiffProviderMock(result: .failure(TestError.scanError(message: ""))))
         switch result {
         case .success:
             XCTFail("Unexpected success")
@@ -24,14 +24,14 @@ final class DangerSwiftPeripheryTests: XCTestCase {
         }
     }
     
-    func testScanErrorOccuredWhileParsingResult() throws {
+    func testScanErrorOccurredWhileParsingResult() throws {
         
     }
 }
 
 private extension DangerSwiftPeripheryTests {
     enum TestError: Error {
-        case scanError(messege: String)
+        case scanError(message: String)
     }
 
     final class DiffProviderMock: PullRequestDiffProvidable {
