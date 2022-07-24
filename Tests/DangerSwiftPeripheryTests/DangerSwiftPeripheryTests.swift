@@ -8,9 +8,13 @@ final class DangerSwiftPeripheryTests: XCTestCase {
         scanExecutor.executeHandler = {
             throw TestError.scanError(message: "test error")
         }
+        let diffProvider = PullRequestDiffProvidableMock()
+        diffProvider.diffHandler = { _ in
+            .success(.modified(hunks: []))
+        }
         let result = DangerPeriphery.scan(scanExecutor: scanExecutor,
                                           outputParser: CheckstyleOutputParser(projectRootPath: DefaultCurrentPathProvider().currentPath),
-                                          diffProvider: DiffProviderMock(result: .failure(TestError.scanError(message: ""))))
+                                          diffProvider: diffProvider)
         switch result {
         case .success:
             XCTFail("Unexpected success")
@@ -32,17 +36,5 @@ final class DangerSwiftPeripheryTests: XCTestCase {
 private extension DangerSwiftPeripheryTests {
     enum TestError: Error {
         case scanError(message: String)
-    }
-
-    final class DiffProviderMock: PullRequestDiffProvidable {
-        private let result: Result<FileDiff.Changes, Error>
-        
-        init(result: Result<FileDiff.Changes, Error>) {
-            self.result = result
-        }
-        
-        func diff(forFile: String) -> Result<FileDiff.Changes, Error> {
-            result
-        }
     }
 }
