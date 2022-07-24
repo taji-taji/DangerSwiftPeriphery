@@ -3,16 +3,25 @@ import Danger
 @testable import DangerSwiftPeriphery
 
 final class DangerSwiftPeripheryTests: XCTestCase {
+    private var scanExecutor: PeripheryScanExecutableMock!
+    private var outputParser: CheckstyleOutputParsableMock!
+    private var diffProvider: PullRequestDiffProvidableMock!
+
+    override func setUp() {
+        super.setUp()
+
+        scanExecutor = PeripheryScanExecutableMock()
+        outputParser = CheckstyleOutputParsableMock()
+        diffProvider = PullRequestDiffProvidableMock()
+    }
+
     func testScanErrorOccurredWhileScanning() throws {
-        let scanExecutor = PeripheryScanExecutableMock()
         scanExecutor.executeHandler = {
             throw TestError.scanError
         }
-        let outputParser = CheckstyleOutputParsableMock()
         outputParser.parseHandler = { _, _ in
             []
         }
-        let diffProvider = PullRequestDiffProvidableMock()
         diffProvider.diffHandler = { _ in
             .success(.modified(hunks: []))
         }
@@ -37,15 +46,12 @@ final class DangerSwiftPeripheryTests: XCTestCase {
     }
     
     func testScanErrorOccurredWhileParsingResult() throws {
-        let scanExecutor = PeripheryScanExecutableMock()
         scanExecutor.executeHandler = {
             "test"
         }
-        let outputParser = CheckstyleOutputParsableMock()
         outputParser.parseHandler = { _, _ in
             throw TestError.parseError
         }
-        let diffProvider = PullRequestDiffProvidableMock()
         diffProvider.diffHandler = { _ in
             .success(.modified(hunks: []))
         }
