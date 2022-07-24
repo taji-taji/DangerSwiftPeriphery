@@ -3,16 +3,25 @@ import Danger
 @testable import DangerSwiftPeriphery
 
 final class DangerSwiftPeripheryTests: XCTestCase {
+    private var scanExecutor: PeripheryScanExecutableMock!
+    private var outputParser: CheckstyleOutputParsableMock!
+    private var diffProvider: PullRequestDiffProvidableMock!
+
+    override func setUp() {
+        super.setUp()
+
+        scanExecutor = PeripheryScanExecutableMock()
+        outputParser = CheckstyleOutputParsableMock(projectRootPath: DefaultCurrentPathProvider().currentPath)
+        diffProvider = PullRequestDiffProvidableMock()
+    }
+
     func testScanErrorOccurredWhileScanning() throws {
-        let scanExecutor = PeripheryScanExecutableMock()
         scanExecutor.executeHandler = {
             throw TestError.scanError
         }
-        let outputParser = CheckstyleOutputParsableMock(projectRootPath: DefaultCurrentPathProvider().currentPath)
         outputParser.parseHandler = { _ in
             []
         }
-        let diffProvider = PullRequestDiffProvidableMock()
         diffProvider.diffHandler = { _ in
             .success(.modified(hunks: []))
         }
@@ -36,15 +45,12 @@ final class DangerSwiftPeripheryTests: XCTestCase {
     }
     
     func testScanErrorOccurredWhileParsingResult() throws {
-        let scanExecutor = PeripheryScanExecutableMock()
         scanExecutor.executeHandler = {
             "test"
         }
-        let outputParser = CheckstyleOutputParsableMock(projectRootPath: DefaultCurrentPathProvider().currentPath)
         outputParser.parseHandler = { _ in
             throw TestError.parseError
         }
-        let diffProvider = PullRequestDiffProvidableMock()
         diffProvider.diffHandler = { _ in
             .success(.modified(hunks: []))
         }
@@ -68,16 +74,13 @@ final class DangerSwiftPeripheryTests: XCTestCase {
     }
 
     func testScanNoCommentViolationsWithoutCreatedOrModifiedDiff() {
-        let scanExecutor = PeripheryScanExecutableMock()
         scanExecutor.executeHandler = { "test" }
-        let outputParser = CheckstyleOutputParsableMock(projectRootPath: DefaultCurrentPathProvider().currentPath)
         outputParser.parseHandler = { _ in
             [
                 .init(filePath: "path1", line: 1, message: "1"),
                 .init(filePath: "path2", line: 2, message: "2"),
             ]
         }
-        let diffProvider = PullRequestDiffProvidableMock()
         diffProvider.diffHandler = { filePath in
             switch filePath {
             case "path1":
