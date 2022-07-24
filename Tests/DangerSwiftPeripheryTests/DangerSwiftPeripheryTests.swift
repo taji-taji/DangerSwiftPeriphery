@@ -8,13 +8,17 @@ final class DangerSwiftPeripheryTests: XCTestCase {
         scanExecutor.executeHandler = {
             throw TestError.scanError(message: "test error")
         }
+        let outputParser = CheckstyleOutputParsableMock()
+        outputParser.parseHandler = { _, _ in
+            []
+        }
         let diffProvider = PullRequestDiffProvidableMock()
         diffProvider.diffHandler = { _ in
             .success(.modified(hunks: []))
         }
         let result = DangerPeriphery.scan(scanExecutor: scanExecutor,
                                           currentPathProvider: DefaultCurrentPathProvider(),
-                                          outputParser: CheckstyleOutputParser(),
+                                          outputParser: outputParser,
                                           diffProvider: diffProvider)
         switch result {
         case .success:
