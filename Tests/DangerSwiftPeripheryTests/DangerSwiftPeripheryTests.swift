@@ -66,6 +66,38 @@ final class DangerSwiftPeripheryTests: XCTestCase {
             XCTFail("Unexpected result")
         }
     }
+
+    func testScanNoCommentViolationsWithoutCreatedOrModifiedDiff() {
+        let scanExecutor = PeripheryScanExecutableMock()
+        scanExecutor.executeHandler = { "test" }
+        let outputParser = CheckstyleOutputParsableMock(projectRootPath: DefaultCurrentPathProvider().currentPath)
+        outputParser.parseHandler = { _ in
+            [
+                .init(filePath: "path1", line: 1, message: "1"),
+                .init(filePath: "path2", line: 2, message: "2"),
+            ]
+        }
+        let diffProvider = PullRequestDiffProvidableMock()
+        diffProvider.diffHandler = { filePath in
+            switch filePath {
+            case "path1":
+                return .success(.deleted(deletedLines: []))
+            case "path2":
+                return .success(.renamed(oldPath: "", hunks: []))
+            default:
+                return .success(.deleted(deletedLines: []))
+            }
+        }
+        let result = DangerPeriphery.scan(scanExecutor: scanExecutor,
+                                          outputParser: outputParser,
+                                          diffProvider: diffProvider)
+        switch result {
+        case let .success(violationsForComment):
+            XCTAssertEqual(violationsForComment.count, 0)
+        case .failure:
+            XCTFail("Unexpected error")
+        }
+    }
 }
 
 private extension DangerSwiftPeripheryTests {
