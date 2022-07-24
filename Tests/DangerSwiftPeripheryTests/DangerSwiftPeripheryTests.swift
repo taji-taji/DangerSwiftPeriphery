@@ -4,7 +4,10 @@ import Danger
 
 final class DangerSwiftPeripheryTests: XCTestCase {
     func testScanErrorOccuredWhileScanning() throws {
-        let scanExecutor = ErrorScanExecutor(errorMessage: "test error")
+        let scanExecutor = PeripheryScanExecutableMock()
+        scanExecutor.executeHandler = {
+            throw TestError.scanError(messege: "test error")
+        }
         let result = DangerPeriphery.scan(scanExecutor: scanExecutor,
                                           outputParser: CheckstyleOutputParser(projectRootPath: DefaultCurrentPathProvider().currentPath),
                                           diffProvider: DiffProviderMock(result: .failure(TestError.scanError(messege: ""))))
@@ -31,18 +34,6 @@ private extension DangerSwiftPeripheryTests {
         case scanError(messege: String)
     }
 
-    final class ErrorScanExecutor: PeripheryScanExecutable {
-        let errorMessage: String
-        
-        init(errorMessage: String) {
-            self.errorMessage = errorMessage
-        }
-        
-        func execute() throws -> String {
-            throw TestError.scanError(messege: errorMessage)
-        }
-    }
-    
     final class DiffProviderMock: PullRequestDiffProvidable {
         private let result: Result<FileDiff.Changes, Error>
         
