@@ -6,22 +6,29 @@ final class DangerSwiftPeripheryTests: XCTestCase {
     func testScanErrorOccurredWhileScanning() throws {
         let scanExecutor = PeripheryScanExecutableMock()
         scanExecutor.executeHandler = {
-            throw TestError.scanError(message: "test error")
+            throw TestError.scanError
+        }
+        let outputParser = CheckstyleOutputParsableMock(projectRootPath: DefaultCurrentPathProvider().currentPath)
+        outputParser.parseHandler = { _ in
+            []
         }
         let diffProvider = PullRequestDiffProvidableMock()
         diffProvider.diffHandler = { _ in
             .success(.modified(hunks: []))
         }
         let result = DangerPeriphery.scan(scanExecutor: scanExecutor,
-                                          outputParser: CheckstyleOutputParser(projectRootPath: DefaultCurrentPathProvider().currentPath),
+                                          outputParser: outputParser,
                                           diffProvider: diffProvider)
         switch result {
         case .success:
             XCTFail("Unexpected success")
         case .failure(let error as TestError):
             switch error {
-            case .scanError(let message):
-                XCTAssertEqual(message, "test error")
+            case .scanError:
+                // noop
+                break
+            default:
+                XCTFail("Unexpected error")
             }
         default:
             XCTFail("Unexpected result")
