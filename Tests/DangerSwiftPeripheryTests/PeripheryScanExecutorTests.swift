@@ -21,8 +21,12 @@ final class PeripheryScanExecutorTests: XCTestCase {
     }
 
     func testExecuteThrowCommandError() throws {
+        let shellExecutor = ShellExecutableMock()
+        shellExecutor.executeHandler = { _, _ in
+            .failure(.init(status: 9999, description: "test error"))
+        }
         executor = PeripheryScanExecutor(commandBuilder: commandBuilder,
-                                         shellExecutor: ErrorShellExecutor(status: 9999, description: "test error"))
+                                         shellExecutor: shellExecutor)
         
         do {
             _ = try executor.execute()
@@ -38,15 +42,18 @@ final class PeripheryScanExecutorTests: XCTestCase {
     }
     
     func testExecuteSucceed() throws {
-        let succeedShellExecutor = SucccedShellExecutor(output: """
-        test
-        test2
-        test3
-        test4
-        """)
-        
+        let shellExecutor = ShellExecutableMock()
+        shellExecutor.executeHandler = { _, _ in
+            .success("""
+                     test
+                     test2
+                     test3
+                     test4
+                     """)
+        }
+
         executor = PeripheryScanExecutor(commandBuilder: commandBuilder,
-                                         shellExecutor: succeedShellExecutor)
+                                         shellExecutor: shellExecutor)
         
         do {
             let output = try executor.execute()
@@ -64,17 +71,19 @@ final class PeripheryScanExecutorTests: XCTestCase {
     }
     
     func testExecuteSucceedWithWarning() throws {
-        let succeedShellExecutor = SucccedShellExecutor(output: """
-        test
-        warning: hoge
-        test2
-        warning: fuga
-        test3
-        test4
-        """)
-        
+        let shellExecutor = ShellExecutableMock()
+        shellExecutor.executeHandler = { _, _ in
+            .success("""
+                     test
+                     warning: hoge
+                     test2
+                     warning: fuga
+                     test3
+                     test4
+                     """)
+        }
         executor = PeripheryScanExecutor(commandBuilder: commandBuilder,
-                                         shellExecutor: succeedShellExecutor)
+                                         shellExecutor: shellExecutor)
         
         do {
             let output = try executor.execute()
@@ -88,42 +97,6 @@ final class PeripheryScanExecutorTests: XCTestCase {
             XCTAssertEqual(output, expected)
         } catch {
             XCTFail("Unexpected error: \(error)")
-        }
-    }
-}
-
-private extension PeripheryScanExecutorTests {
-    final class ErrorShellExecutor: ShellExecutable {
-        private let status: Int32
-        private let description: String
-        
-        init(status: Int32, description: String) {
-            self.status = status
-            self.description = description
-        }
-        
-        func execute(_ command: String) -> Result<String, CommandError> {
-            execute(command, arguments: [])
-        }
-        
-        func execute(_ command: String, arguments: [String]) -> Result<String, CommandError> {
-            .failure(.init(status: status, description: description))
-        }
-    }
-    
-    final class SucccedShellExecutor: ShellExecutable {
-        private let output: String
-        
-        init(output: String) {
-            self.output = output
-        }
-        
-        func execute(_ command: String) -> Result<String, CommandError> {
-            execute(command, arguments: [])
-        }
-        
-        func execute(_ command: String, arguments: [String]) -> Result<String, CommandError> {
-            .success(output)
         }
     }
 }
