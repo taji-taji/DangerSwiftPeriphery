@@ -20,25 +20,25 @@ final class PeripheryScanCommandBuilderTests: XCTestCase {
     }
 
     func testPerihperyPath() throws {
-        scanCommandBuilder = PeripheryScanCommandBuilder(peripheryPath: "test/path/to/periphery", additionalArguments: [])
+        scanCommandBuilder = PeripheryScanCommandBuilder(peripheryExecutable: "test/path/to/periphery", additionalArguments: [])
         
         XCTAssertEqual(scanCommandBuilder.command, "test/path/to/periphery scan --format checkstyle --quiet --disable-update-check")
     }
     
     func testAdditionalArgumantsNoOverride() throws {
-        scanCommandBuilder = PeripheryScanCommandBuilder(peripheryPath: "periphery", additionalArguments: ["--test-arg1", "--test-arg2 value"])
+        scanCommandBuilder = PeripheryScanCommandBuilder(peripheryExecutable: "periphery", additionalArguments: ["--test-arg1", "--test-arg2 value"])
         
         XCTAssertEqual(scanCommandBuilder.command, "periphery scan --test-arg1 --test-arg2 value --format checkstyle --quiet --disable-update-check")
     }
     
     func testAdditionalArgumantsOverride() throws {
-        scanCommandBuilder = PeripheryScanCommandBuilder(peripheryPath: "periphery", additionalArguments: ["--format json"])
+        scanCommandBuilder = PeripheryScanCommandBuilder(peripheryExecutable: "periphery", additionalArguments: ["--format json"])
         
         XCTAssertEqual(scanCommandBuilder.command, "periphery scan --format checkstyle --quiet --disable-update-check")
     }
     
     func testAdditionalArgumantsDuplicate() throws {
-        scanCommandBuilder = PeripheryScanCommandBuilder(peripheryPath: "periphery", additionalArguments: ["--quiet", "--disable-update-check"])
+        scanCommandBuilder = PeripheryScanCommandBuilder(peripheryExecutable: "periphery", additionalArguments: ["--quiet", "--disable-update-check"])
         
         XCTAssertEqual(scanCommandBuilder.command, "periphery scan --format checkstyle --quiet --disable-update-check")
     }

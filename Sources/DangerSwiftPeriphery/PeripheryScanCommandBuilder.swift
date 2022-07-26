@@ -8,7 +8,7 @@
 import Foundation
 
 struct PeripheryScanCommandBuilder {
-    private let peripheryPath: String
+    private let peripheryExecutable: String
     private let additionalArguments: [String]
     private let overrideArgumentKeys: [String] = [
         "--format",
@@ -28,12 +28,12 @@ struct PeripheryScanCommandBuilder {
             "--disable-update-check"
         ]
         
-        return peripheryPath + " scan " + overridedArguments.joined(separator: " ")
+        return peripheryExecutable + " scan " + overridedArguments.joined(separator: " ")
     }
     
-    init(peripheryPath: String,
+    init(peripheryExecutable: String,
          additionalArguments: [String]) {
-        self.peripheryPath = peripheryPath
+        self.peripheryExecutable = peripheryExecutable
         self.additionalArguments = additionalArguments
     }
 }

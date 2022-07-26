@@ -8,10 +8,10 @@
 import Danger
 
 public struct DangerPeriphery {
-    public static func scan(peripheryPath: String = "periphery",
+    public static func scan(peripheryExecutable: String = "swift run periphery",
                             arguments: [String] = []) {
         // make dependencies
-        let commandBuilder = PeripheryScanCommandBuilder(peripheryPath: peripheryPath,
+        let commandBuilder = PeripheryScanCommandBuilder(peripheryExecutable: peripheryExecutable,
                                                          additionalArguments: arguments)
         let scanExecutor = PeripheryScanExecutor(commandBuilder: commandBuilder)
         let diffProvider = PullRequestDiffProvider(dangerDSL: Danger())

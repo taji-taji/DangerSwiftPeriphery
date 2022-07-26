@@ -13,7 +13,7 @@ final class PeripheryScanExecutorTests: XCTestCase {
     private var commandBuilder: PeripheryScanCommandBuilder!
     
     override func setUpWithError() throws {
-        commandBuilder = PeripheryScanCommandBuilder(peripheryPath: "", additionalArguments: [])
+        commandBuilder = PeripheryScanCommandBuilder(peripheryExecutable: "", additionalArguments: [])
     }
 
     override func tearDownWithError() throws {
