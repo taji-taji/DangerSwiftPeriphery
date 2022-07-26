@@ -17,7 +17,6 @@ This plugin will comment unreferenced code detected by periphery via Danger Swif
 
 ### Preparation
 
-- Install [Periphery](https://github.com/peripheryapp/periphery) on the machine you want to run Danger Swift on beforehand.
 - [Danger Swift](https://github.com/danger/swift) Setup.
 
 ### Package.swift
@@ -76,7 +75,7 @@ You may also specify the location of periphery binaries.
 ```swift
 import DangerSwiftPeriphery
 
-DangerPeriphery.scan(peripheryPath: "/path/to/periphery")
+DangerPeriphery.scan(peripheryExecutable: "/path/to/periphery")
 ```
 
 
