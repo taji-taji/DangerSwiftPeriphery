@@ -9,6 +9,18 @@ import Danger
 
 public struct DangerPeriphery {
     public static func scan(peripheryExecutable: String = "swift run periphery",
+                            @PeripheryArgumentsBuilder arguments: () -> [String] = { [] }) {
+        scan(peripheryExecutable: peripheryExecutable,
+             arguments: arguments())
+    }
+
+    public static func scan(peripheryExecutable: String = "swift run periphery",
+                            arguments: [PeripheryArguments] = []) {
+        scan(peripheryExecutable: peripheryExecutable,
+             arguments: arguments.map { $0.optionString })
+    }
+
+    public static func scan(peripheryExecutable: String = "swift run periphery",
                             arguments: [String] = []) {
         // make dependencies
         let commandBuilder = PeripheryScanCommandBuilder(peripheryExecutable: peripheryExecutable,
