@@ -47,6 +47,8 @@ let package = Package(
 
 ### Dangerfile.swift
 
+#### Set scan options
+
 If you have a `.periphery.yml` file, simply include the following in `Dangerfile.swift`
 
 ```swift
@@ -68,7 +70,30 @@ DangerPeriphery.scan(arguments: [
     "--index-store-path /path/to/index/store",
     "--skip-build"
 ])
+
+// or use PeripheryArguments enum as array
+DangerPeriphery.scan(arguments: [
+    PeripheryArguments.workspace("MaApp.xcworkspace"),
+    PeripheryArgumens.schemes(["MyApp"]),
+    PeripheryArgumens.indexStorePath("/path/to/index/store"),
+    PeripheryArguments.skipBuild
+])
+
+// or use PeripheryArguments enum with resultBuilder
+DangerPeriphery.scan {
+    PeripheryArguments.workspace("MaApp.xcworkspace")
+    PeripheryArgumens.schemes(["MyApp"])
+    PeripheryArgumens.indexStorePath("/path/to/index/store")
+    PeripheryArguments.skipBuild
+}
+
+// All three scan methods above behave the same.
 ```
+
+In the future, if a new option is added to Periphery, and it is undefined in this plugin, you can use `.custom`.
+For example, if a new version of Periphery adds an option `--new-option` that is undefined in `PeripheryArguments` of this plugin, you can use `PeripheryArguments.custom("--new-option foo")` to use `--new-option`.
+
+#### Specify periphery executable
 
 You may also specify the location of periphery binaries.
 
