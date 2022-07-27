@@ -74,16 +74,16 @@ DangerPeriphery.scan(arguments: [
 // or use PeripheryArguments enum as array
 DangerPeriphery.scan(arguments: [
     PeripheryArguments.workspace("MaApp.xcworkspace"),
-    PeripheryArgumens.schemes(["MyApp"]),
-    PeripheryArgumens.indexStorePath("/path/to/index/store"),
+    PeripheryArguments.schemes(["MyApp"]),
+    PeripheryArguments.indexStorePath("/path/to/index/store"),
     PeripheryArguments.skipBuild
 ])
 
 // or use PeripheryArguments enum with resultBuilder
 DangerPeriphery.scan {
     PeripheryArguments.workspace("MaApp.xcworkspace")
-    PeripheryArgumens.schemes(["MyApp"])
-    PeripheryArgumens.indexStorePath("/path/to/index/store")
+    PeripheryArguments.schemes(["MyApp"])
+    PeripheryArguments.indexStorePath("/path/to/index/store")
     PeripheryArguments.skipBuild
 }
 
