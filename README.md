@@ -12,6 +12,9 @@ This plugin will comment unreferenced code detected by periphery via Danger Swif
 
 ![Image](Resources/Images/screenshot.png)
 
+## Requirements
+
+- Swift 5.5.2 or later
 
 ## Usage
 

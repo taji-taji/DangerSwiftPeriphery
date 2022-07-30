@@ -8,12 +8,29 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        xcode: ["13.4.1", "13.3.1", "13.2.1"]
+        include:
+          - xcode: "13.4.1"
+            macos: macos-12
+          - xcode: "13.3.1"
+            macos: macos-12
+          - xcode: "13.2.1"
+            macos: macos-12
+    runs-on: ${{ matrix.macos }}
     env:
       GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
     steps:
-      - name: Chackout
+      - name: Checkout
         uses: actions/checkout@v2
+      - name: Select Xcode version
+        run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app; swift -version
+      - name: Get Swift Version
+        id: get-swift-version
+        run: |
+          echo "::set-output name=version::$(swift -version | head -n 1 | sed s/,// )"
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
