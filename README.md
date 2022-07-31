@@ -29,17 +29,17 @@ let package = Package(
     // ...
     dependencies: [
         // Danger
-        .package(name: "danger-swift", url: "https://github.com/danger/swift.git", from: "3.0.0"), // dev
+        .package(url: "https://github.com/danger/swift.git", from: "3.0.0"), // dev
         // Danger Plugins
         // Add the line below.
-        .package(name: "DangerSwiftPeriphery", url: "https://github.com/taji-taji/DangerSwiftPeriphery.git", from: "1.0.0"), // dev
+        .package(url: "https://github.com/taji-taji/DangerSwiftPeriphery.git", from: "1.0.0"), // dev
     ],
     targets: [
         // ...
         // Add DangerSwiftPeriphery to dependencies in DangerDependencies.
         .target(name: "DangerDependencies",
                 dependencies: [
-                    .product(name: "Danger", package: "danger-swift"),
+                    .product(name: "Danger", package: "swift"),
                     "DangerSwiftPeriphery",
                 ]),
         // ...
@@ -106,4 +106,19 @@ import DangerSwiftPeriphery
 DangerPeriphery.scan(peripheryExecutable: "/path/to/periphery")
 ```
 
+### Debug print
+
+The option for Debug can be used to output debugging information.
+This can be done in one of the following ways.
+
+1. `verbose` argument
+    - Set the `verbose` argument of the scan method to true. (Default: false)
+    ```swift
+    // in Dangerfile.swift
+    DangerPeriphery.scan(verbose: true)
+    ```
+
+2. `DANGER_SWIFT_PERIPHERY_DEBUG` environment variables
+    - Set `DANGER_SWIFT_PERIPHERY_DEBUG=1` in the environment where danger-swift is run.
+This environment variable overrides the value of the `verbose` argument described above.
 
