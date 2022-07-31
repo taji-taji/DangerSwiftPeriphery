@@ -27,7 +27,7 @@ public enum PeripheryArguments {
     case custom(String)
 }
 
-public extension PeripheryArguments {
+extension PeripheryArguments {
     var optionString: String {
         if case let .custom(value) = self {
             return value
