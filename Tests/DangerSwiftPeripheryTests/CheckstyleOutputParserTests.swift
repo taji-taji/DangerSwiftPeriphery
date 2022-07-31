@@ -47,11 +47,11 @@ final class CheckstyleOutputParserTests: XCTestCase {
             XCTAssertEqual(violations[2].line, 1)
             XCTAssertEqual(violations[2].message, "test message 3")
         } catch {
-            XCTFail("Unexpeced error: \(error)")
+            XCTFail("Unexpected error: \(error)")
         }
     }
     
-    func testNoCheckstyleXML() throws {
+    func testInvalidCheckstyleXML() throws {
         let xmlString = """
         <?xml version="1.0" encoding="utf-8"?>
         <test version="4.3">
@@ -69,7 +69,8 @@ final class CheckstyleOutputParserTests: XCTestCase {
         } catch let error as CheckstyleOutputParser.Error {
             switch error {
             case .invalidCheckstyleXML:
-                break
+                // noop
+                return
             }
         } catch {
             XCTFail("Unexpected error: \(error)")
