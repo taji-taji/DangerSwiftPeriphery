@@ -22,6 +22,7 @@ struct PullRequestDiffProvider: PullRequestDiffProvidable {
     func diff(forFile file: String) -> Result<FileDiff.Changes, Error> {
         switch dangerDSL.utils.diff(forFile: file, sourceBranch: sourceBranch()) {
         case .success(let diff):
+            Logger.shared.debug("changes for \(file):\(diff.changes)")
             return .success(diff.changes)
         case .failure(let error):
             return .failure(error)

@@ -24,7 +24,7 @@ struct ShellExecutor: ShellExecutable {
     
     func execute(_ command: String, arguments: [String] = []) -> Result<String, CommandError> {
         let script = "\(command) \(arguments.joined(separator: " "))"
-        print("Executing \(script)")
+        Logger.shared.debug("command started: \(script)")
 
         let env = ProcessInfo.processInfo.environment
         let task = Process()
@@ -44,6 +44,7 @@ struct ShellExecutor: ShellExecutable {
 
         let status = task.terminationStatus
         if status == 0 {
+            Logger.shared.debug("command output: " + outputMessage!)
             return .success(outputMessage!)
         } else {
             return .failure(.init(status: status, description: errorMessage!))
