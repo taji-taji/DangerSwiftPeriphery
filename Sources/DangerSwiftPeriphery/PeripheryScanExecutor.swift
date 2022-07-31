@@ -26,7 +26,8 @@ struct PeripheryScanExecutor<SE: ShellExecutable>: PeripheryScanExecutable {
         switch shellExecutor.execute(commandBuilder.command) {
         case .success(let output):
             var outputLines = output.split(whereSeparator: \.isNewline)
-            outputLines.removeAll(where: { $0.hasPrefix(self.warnPrefix) })
+            outputLines.removeAll(where: { $0.hasPrefix(warnPrefix) })
+            Logger.shared.debug("scan output: \(outputLines)")
             return outputLines.joined(separator: "\n")
         case .failure(let error):
             throw error
@@ -37,7 +38,7 @@ struct PeripheryScanExecutor<SE: ShellExecutable>: PeripheryScanExecutable {
 extension PeripheryScanExecutor where SE == ShellExecutor {
     init(commandBuilder: PeripheryScanCommandBuilder) {
         self.commandBuilder = commandBuilder
-        self.shellExecutor = .init()
+        shellExecutor = .init()
     }
 }
 
