@@ -6,6 +6,7 @@ final class DangerSwiftPeripheryTests: XCTestCase {
     private var scanExecutor: PeripheryScanExecutableMock!
     private var outputParser: CheckstyleOutputParsableMock!
     private var diffProvider: PullRequestDiffProvidableMock!
+    private var dangerCommentable: DangerCommentableMock!
 
     override func setUp() {
         super.setUp()
@@ -13,6 +14,7 @@ final class DangerSwiftPeripheryTests: XCTestCase {
         scanExecutor = PeripheryScanExecutableMock()
         outputParser = CheckstyleOutputParsableMock(projectRootPath: DefaultCurrentPathProvider().currentPath)
         diffProvider = PullRequestDiffProvidableMock()
+        dangerCommentable = DangerCommentableMock()
     }
 
     func testScanErrorOccurredWhileScanning() throws {
@@ -100,6 +102,60 @@ final class DangerSwiftPeripheryTests: XCTestCase {
         case .failure:
             XCTFail("Unexpected error")
         }
+    }
+
+    func testHandleScanResultSuccessShouldComment() {
+        XCTAssertEqual(dangerCommentable.warnCallCount, 0)
+        dangerCommentable.warnHandler = { _, _, _ in  }
+
+        let scanResult: Result<[DangerSwiftPeriphery.Violation], Error> = .success([
+            .init(filePath: "path1", line: 1, message: "1"),
+            .init(filePath: "path2", line: 2, message: "2"),
+        ])
+        DangerPeriphery.handleScanResult(scanResult,
+                                         danger: dangerCommentable,
+                                         shouldComment: true)
+
+        XCTAssertEqual(dangerCommentable.warnCallCount, 2)
+    }
+
+    func testHandleScanResultFailureShouldComment() {
+        XCTAssertEqual(dangerCommentable.failCallCount, 0)
+        dangerCommentable.failHandler = { _ in  }
+
+        let scanResult: Result<[DangerSwiftPeriphery.Violation], Error> = .failure(TestError.scanError)
+        DangerPeriphery.handleScanResult(scanResult,
+                                         danger: dangerCommentable,
+                                         shouldComment: true)
+
+        XCTAssertEqual(dangerCommentable.failCallCount, 1)
+    }
+
+    func testHandleScanResultSuccessShouldNotComment() {
+        XCTAssertEqual(dangerCommentable.warnCallCount, 0)
+        dangerCommentable.warnHandler = { _, _, _ in  }
+
+        let scanResult: Result<[DangerSwiftPeriphery.Violation], Error> = .success([
+            .init(filePath: "path1", line: 1, message: "1"),
+            .init(filePath: "path2", line: 2, message: "2"),
+        ])
+        DangerPeriphery.handleScanResult(scanResult,
+                                         danger: dangerCommentable,
+                                         shouldComment: false)
+
+        XCTAssertEqual(dangerCommentable.warnCallCount, 0)
+    }
+
+    func testHandleScanResultFailureShouldNotComment() {
+        XCTAssertEqual(dangerCommentable.failCallCount, 0)
+        dangerCommentable.failHandler = { _ in  }
+
+        let scanResult: Result<[DangerSwiftPeriphery.Violation], Error> = .failure(TestError.scanError)
+        DangerPeriphery.handleScanResult(scanResult,
+                                         danger: dangerCommentable,
+                                         shouldComment: false)
+
+        XCTAssertEqual(dangerCommentable.failCallCount, 0)
     }
 }
 
