@@ -3,7 +3,6 @@
 //
 
 import Foundation
-import Danger
 @testable import DangerSwiftPeriphery
 
 final class PullRequestDiffProvidableMock: PullRequestDiffProvidable {
