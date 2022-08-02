@@ -6,8 +6,8 @@
 
 import Foundation
 
-struct Violation {
-    let filePath: String
-    let line: Int
-    let message: String
+public struct Violation {
+    public let filePath: String
+    public let line: Int
+    public let message: String
 }
