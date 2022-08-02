@@ -64,32 +64,34 @@ public struct DangerPeriphery {
         do {
             let output = try scanExecutor.execute()
             let allViolations = try outputParser.parse(xml: output)
-            let violationsForComment = allViolations.filter({ violation -> Bool in
-                let result = diffProvider.diff(forFile: violation.filePath)
-                guard let changes = try? result.get() else {
-                    return false
-                }
-                // comment only `Created files` and `Files that have been modified and are contained within hunk`
-                switch changes {
-                case .created:
-                    return true
-                case .deleted:
-                    return false
-                case let .modified(hunks):
-                    return hunks.contains(where: {
-                        let lineRange = ($0.newLineStart ..< $0.newLineStart + $0.newLineSpan)
-                        if lineRange.contains(violation.line) {
-                            return true
-                        }
-                        return false
-                    })
-                case .renamed:
-                    return false
-                }
-            })
+            let violationsForComment = allViolations.filter { isViolationIncludedInInsertions($0, diffProvider: diffProvider) }
             return .success(violationsForComment)
         } catch {
             return .failure(error)
+        }
+    }
+
+    static func isViolationIncludedInInsertions(_ violation: Violation, diffProvider: PullRequestDiffProvidable) -> Bool {
+        let result = diffProvider.diff(forFile: violation.filePath)
+        guard let changes = try? result.get() else {
+            return false
+        }
+        // comment only `Created files` and `Files that have been modified and are contained within hunk`
+        switch changes {
+        case .created:
+            return true
+        case .deleted:
+            return false
+        case let .modified(hunks):
+            return hunks.contains(where: {
+                let lineRange = ($0.newLineStart ..< $0.newLineStart + $0.newLineSpan)
+                return lineRange.contains(violation.line) {
+                    return true
+                }
+                return false
+            })
+        case .renamed:
+            return false
         }
     }
 
