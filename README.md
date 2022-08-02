@@ -96,6 +96,32 @@ DangerPeriphery.scan {
 In the future, if a new option is added to Periphery, and it is undefined in this plugin, you can use `.custom`.
 For example, if a new version of Periphery adds an option `--new-option` that is undefined in `PeripheryArguments` of this plugin, you can use `PeripheryArguments.custom("--new-option foo")` to use `--new-option`.
 
+#### Handle scan result manually
+
+By setting the `shouldComment` option to false, this plugin will not comment on the target pull request.  
+You can manually handle the scan results by setting this option to false and using the return value of the scan method.
+
+```swift
+import Danger
+import DangerSwiftPeriphery
+
+let result = DangerPeriphery.scan(shouldComment: false)
+
+// handle scan result manually
+switch result {
+case let .success(violations):
+    // handle scan violations
+    for violation in violations {
+        warn(message: violation.message,
+             file: violation.file,
+             line: violation.line)
+    }
+case let .failure(error):
+    // handle scan error
+    fail(error.localizedDescription)
+}
+```
+
 #### Specify periphery executable
 
 You may also specify the location of periphery binaries.

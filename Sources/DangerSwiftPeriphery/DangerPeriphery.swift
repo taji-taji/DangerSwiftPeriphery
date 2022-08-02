@@ -8,32 +8,41 @@
 import Danger
 
 public struct DangerPeriphery {
+    @discardableResult
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             @PeripheryArgumentsBuilder arguments: () -> [String] = { [] },
-                            verbose: Bool = false) {
+                            shouldComment: Bool = true,
+                            verbose: Bool = false) -> Result<[Violation] , Error> {
         scan(peripheryExecutable: peripheryExecutable,
              arguments: arguments(),
+             shouldComment: shouldComment,
              verbose: verbose)
     }
 
+    @discardableResult
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             arguments: [PeripheryArguments] = [],
-                            verbose: Bool = false) {
+                            shouldComment: Bool = true,
+                            verbose: Bool = false) -> Result<[Violation] , Error> {
         scan(peripheryExecutable: peripheryExecutable,
              arguments: arguments.map { $0.optionString },
+             shouldComment: shouldComment,
              verbose: verbose)
     }
 
+    @discardableResult
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             arguments: [String] = [],
-                            verbose: Bool = false) {
+                            shouldComment: Bool = true,
+                            verbose: Bool = false) -> Result<[Violation] , Error> {
         Logger.shared.verbose = verbose
 
         // make dependencies
         let commandBuilder = PeripheryScanCommandBuilder(peripheryExecutable: peripheryExecutable,
                                                          additionalArguments: arguments)
         let scanExecutor = PeripheryScanExecutor(commandBuilder: commandBuilder)
-        let diffProvider = PullRequestDiffProvider(dangerDSL: Danger())
+        let danger = Danger()
+        let diffProvider = PullRequestDiffProvider(dangerDSL: danger)
         let currentPathProvider = DefaultCurrentPathProvider()
         let outputParser = CheckstyleOutputParser(projectRootPath: currentPathProvider.currentPath)
         
@@ -43,16 +52,8 @@ public struct DangerPeriphery {
                                diffProvider: diffProvider)
         
         // handle scan result
-        switch result {
-        case .success(let violations):
-            for violation in violations {
-                warn(message: violation.message,
-                     file: violation.filePath,
-                     line: violation.line)
-            }
-        case .failure(let error):
-            fail(error.localizedDescription)
-        }
+        handleScanResult(result, danger: danger, shouldComment: shouldComment)
+        return result
     }
     
     static func scan<PSE: PeripheryScanExecutable,
@@ -90,6 +91,20 @@ public struct DangerPeriphery {
             return .success(violationsForComment)
         } catch {
             return .failure(error)
+        }
+    }
+
+    static func handleScanResult(_ scanResult: Result<[Violation], Error>, danger: DangerCommentable, shouldComment: Bool) {
+        guard shouldComment else { return }
+        switch scanResult {
+        case .success(let violations):
+            for violation in violations {
+                danger.warn(message: violation.message,
+                            file: violation.filePath,
+                            line: violation.line)
+            }
+        case .failure(let error):
+            danger.fail(error.localizedDescription)
         }
     }
 }
