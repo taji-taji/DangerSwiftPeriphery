@@ -36,9 +36,7 @@ extension DangerDSL: PullRequestDiffProvidable {
 
 private extension FileDiff.Hunk {
     init(from dangerHunk: Danger.FileDiff.Hunk) {
-        oldLineStart = dangerHunk.oldLineStart
-        oldLineSpan = dangerHunk.oldLineSpan
-        newLineStart = dangerHunk.newLineStart
-        newLineSpan = dangerHunk.newLineSpan
+        oldLineRange = dangerHunk.oldLineStart ..< dangerHunk.oldLineStart + dangerHunk.oldLineSpan
+        newLineRange = dangerHunk.newLineStart ..< dangerHunk.newLineStart + dangerHunk.newLineSpan
     }
 }

@@ -83,13 +83,7 @@ public struct DangerPeriphery {
         case .deleted:
             return false
         case let .modified(hunks):
-            return hunks.contains(where: {
-                let lineRange = ($0.newLineStart ..< $0.newLineStart + $0.newLineSpan)
-                return lineRange.contains(violation.line) {
-                    return true
-                }
-                return false
-            })
+            return hunks.contains(where: { $0.newLineRange.contains(violation.line) })
         case .renamed:
             return false
         }

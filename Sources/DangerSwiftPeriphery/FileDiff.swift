@@ -13,9 +13,7 @@ extension FileDiff {
 
 extension FileDiff {
     struct Hunk {
-        let oldLineStart: Int
-        let oldLineSpan: Int
-        let newLineStart: Int
-        let newLineSpan: Int
+        let oldLineRange: Range<Int>
+        let newLineRange: Range<Int>
     }
 }

@@ -193,7 +193,7 @@ final class DangerSwiftPeripheryTests: XCTestCase {
             let violation = DangerSwiftPeriphery.Violation(filePath: "test1", line: 3, message: "")
             XCTContext.runActivity(named: "When one hunk contains violation line, it should return true") { _ in
                 diffProvider.diffHandler = { _ in
-                    .success(.modified(hunks: [.init(oldLineStart: 1, oldLineSpan: 1, newLineStart: 1, newLineSpan: 4)]))
+                    .success(.modified(hunks: [.init(oldLineRange: 1 ..< 2, newLineRange: 1 ..< 4)]))
                 }
 
                 let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
@@ -203,8 +203,8 @@ final class DangerSwiftPeripheryTests: XCTestCase {
             XCTContext.runActivity(named: "When no hunks contains violation line, it should return false") { _ in
                 diffProvider.diffHandler = { _ in
                     .success(.modified(hunks: [
-                        .init(oldLineStart: 1, oldLineSpan: 1, newLineStart: 1, newLineSpan: 1),
-                        .init(oldLineStart: 4, oldLineSpan: 2, newLineStart: 5, newLineSpan: 2),
+                        .init(oldLineRange: 1 ..< 2, newLineRange: 1 ..< 2),
+                        .init(oldLineRange: 4 ..< 6, newLineRange: 5 ..< 7),
                     ]))
                 }
 
