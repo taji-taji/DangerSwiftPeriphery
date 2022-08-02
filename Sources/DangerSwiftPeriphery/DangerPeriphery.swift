@@ -42,14 +42,13 @@ public struct DangerPeriphery {
                                                          additionalArguments: arguments)
         let scanExecutor = PeripheryScanExecutor(commandBuilder: commandBuilder)
         let danger = Danger()
-        let diffProvider = PullRequestDiffProvider(dangerDSL: danger)
         let currentPathProvider = DefaultCurrentPathProvider()
         let outputParser = CheckstyleOutputParser(projectRootPath: currentPathProvider.currentPath)
         
         // execute scan
         let result = self.scan(scanExecutor: scanExecutor,
                                outputParser: outputParser,
-                               diffProvider: diffProvider)
+                               diffProvider: danger)
         
         // handle scan result
         handleScanResult(result, danger: danger, shouldComment: shouldComment)
