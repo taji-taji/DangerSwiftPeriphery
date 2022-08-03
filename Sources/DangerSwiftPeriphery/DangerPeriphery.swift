@@ -42,14 +42,13 @@ public struct DangerPeriphery {
                                                          additionalArguments: arguments)
         let scanExecutor = PeripheryScanExecutor(commandBuilder: commandBuilder)
         let danger = Danger()
-        let diffProvider = PullRequestDiffProvider(dangerDSL: danger)
         let currentPathProvider = DefaultCurrentPathProvider()
         let outputParser = CheckstyleOutputParser(projectRootPath: currentPathProvider.currentPath)
         
         // execute scan
         let result = self.scan(scanExecutor: scanExecutor,
                                outputParser: outputParser,
-                               diffProvider: diffProvider)
+                               diffProvider: danger)
         
         // handle scan result
         handleScanResult(result, danger: danger, shouldComment: shouldComment)
@@ -65,32 +64,28 @@ public struct DangerPeriphery {
         do {
             let output = try scanExecutor.execute()
             let allViolations = try outputParser.parse(xml: output)
-            let violationsForComment = allViolations.filter({ violation -> Bool in
-                let result = diffProvider.diff(forFile: violation.filePath)
-                guard let changes = try? result.get() else {
-                    return false
-                }
-                // comment only `Created files` and `Files that have been modified and are contained within hunk`
-                switch changes {
-                case .created:
-                    return true
-                case .deleted:
-                    return false
-                case let .modified(hunks):
-                    return hunks.contains(where: {
-                        let lineRange = ($0.newLineStart ..< $0.newLineStart + $0.newLineSpan)
-                        if lineRange.contains(violation.line) {
-                            return true
-                        }
-                        return false
-                    })
-                case .renamed:
-                    return false
-                }
-            })
+            let violationsForComment = allViolations.filter { isViolationIncludedInInsertions($0, diffProvider: diffProvider) }
             return .success(violationsForComment)
         } catch {
             return .failure(error)
+        }
+    }
+
+    static func isViolationIncludedInInsertions(_ violation: Violation, diffProvider: PullRequestDiffProvidable) -> Bool {
+        let result = diffProvider.diff(forFile: violation.filePath)
+        guard let changes = try? result.get() else {
+            return false
+        }
+        // comment only `Created files` and `Files that have been modified and are contained within hunk`
+        switch changes {
+        case .created:
+            return true
+        case .deleted:
+            return false
+        case let .modified(hunks):
+            return hunks.contains(where: { $0.newLineRange.contains(violation.line) })
+        case .renamed:
+            return false
         }
     }
 
