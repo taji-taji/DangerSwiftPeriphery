@@ -113,7 +113,7 @@ case let .success(violations):
     // handle scan violations
     for violation in violations {
         warn(message: violation.message,
-             file: violation.file,
+             file: violation.filePath,
              line: violation.line)
     }
 case let .failure(error):
