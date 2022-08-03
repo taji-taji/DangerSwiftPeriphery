@@ -6,6 +6,7 @@ extension DangerDSL: PullRequestDiffProvidable {
     func diff(forFile file: String) -> Result<FileDiff.Changes, Error> {
         utils.diff(forFile: file, sourceBranch: sourceBranch())
              .map {
+                 Logger.shared.debug("changes for \(file):\($0.changes)")
                  switch $0.changes {
                  case let .created(addedLines):
                      return .created(addedLines: addedLines)
