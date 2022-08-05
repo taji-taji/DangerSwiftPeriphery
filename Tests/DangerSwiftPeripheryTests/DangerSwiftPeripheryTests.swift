@@ -158,60 +158,57 @@ final class DangerSwiftPeripheryTests: XCTestCase {
         XCTAssertEqual(dangerCommentable.failCallCount, 0)
     }
 
-    func testIsViolationIncludedInInsertions() {
-        XCTContext.runActivity(named: "When diff is .created, it should return true") { _ in
-            let violation = DangerSwiftPeriphery.Violation(filePath: "test1", line: 1, message: "")
-            diffProvider.diffHandler = { _ in
-                .success(.created(addedLines: []))
-            }
-
-            let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
-            XCTAssertTrue(result)
+    func testIsViolationReturnsTrueWhenTheViolationIsIncludedInCreated() {
+        let violation = DangerSwiftPeriphery.Violation(filePath: "test1", line: 1, message: "")
+        diffProvider.diffHandler = { _ in
+            .success(.created(addedLines: []))
         }
 
-        XCTContext.runActivity(named: "When diff is .renamed, it should return false") { _ in
-            let violation = DangerSwiftPeriphery.Violation(filePath: "test1", line: 1, message: "")
-            diffProvider.diffHandler = { _ in
-                .success(.renamed(oldPath: "test2", hunks: []))
-            }
+        let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
+        XCTAssertTrue(result)
+    }
 
-            let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
-            XCTAssertFalse(result)
+    func testIsViolationReturnsFalseWhenTheViolationIsIncludedInRenamed() {
+        let violation = DangerSwiftPeriphery.Violation(filePath: "test1", line: 1, message: "")
+        diffProvider.diffHandler = { _ in
+            .success(.renamed(oldPath: "test2", hunks: []))
         }
 
-        XCTContext.runActivity(named: "When diff is .deleted, it should return false") { _ in
-            let violation = DangerSwiftPeriphery.Violation(filePath: "test1", line: 1, message: "")
-            diffProvider.diffHandler = { _ in
-                .success(.deleted(deletedLines: []))
-            }
+        let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
+        XCTAssertFalse(result)
+    }
 
-            let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
-            XCTAssertFalse(result)
+    func testIsViolationReturnsFalseWhenTheViolationIsIncludedInDeleted() {
+        let violation = DangerSwiftPeriphery.Violation(filePath: "test1", line: 1, message: "")
+        diffProvider.diffHandler = { _ in
+            .success(.deleted(deletedLines: []))
         }
 
-        XCTContext.runActivity(named: "When diff is .modified") { _ in
-            let violation = DangerSwiftPeriphery.Violation(filePath: "test1", line: 3, message: "")
-            XCTContext.runActivity(named: "When one hunk contains violation line, it should return true") { _ in
-                diffProvider.diffHandler = { _ in
-                    .success(.modified(hunks: [.init(oldLineRange: 1 ..< 2, newLineRange: 1 ..< 4)]))
-                }
+        let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
+        XCTAssertFalse(result)
+    }
 
-                let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
-                XCTAssertTrue(result)
-            }
-
-            XCTContext.runActivity(named: "When no hunks contains violation line, it should return false") { _ in
-                diffProvider.diffHandler = { _ in
-                    .success(.modified(hunks: [
-                        .init(oldLineRange: 1 ..< 2, newLineRange: 1 ..< 2),
-                        .init(oldLineRange: 4 ..< 6, newLineRange: 5 ..< 7),
-                    ]))
-                }
-
-                let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
-                XCTAssertFalse(result)
-            }
+    func testIsViolationReturnsTrueWhenTheViolationIsIncludedInModifiedAndTheirHunks() {
+        let violation = DangerSwiftPeriphery.Violation(filePath: "test1", line: 3, message: "")
+        diffProvider.diffHandler = { _ in
+            .success(.modified(hunks: [.init(oldLineRange: 1 ..< 2, newLineRange: 1 ..< 4)]))
         }
+
+        let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
+        XCTAssertTrue(result)
+    }
+
+    func testIsViolationReturnsFalseWhenTheViolationIsIncludedInModifiedAndNotIncludedInTheirHunks() {
+        let violation = DangerSwiftPeriphery.Violation(filePath: "test1", line: 3, message: "")
+        diffProvider.diffHandler = { _ in
+            .success(.modified(hunks: [
+                .init(oldLineRange: 1 ..< 2, newLineRange: 1 ..< 2),
+                .init(oldLineRange: 4 ..< 6, newLineRange: 5 ..< 7),
+            ]))
+        }
+
+        let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
+        XCTAssertFalse(result)
     }
 }
 
