@@ -6,11 +6,7 @@
 
 import Foundation
 
-protocol CurrentPathProvidable {
-    var currentPath: String { get }
-}
-
-struct DefaultCurrentPathProvider<SE: ShellExecutable>: CurrentPathProvidable {
+struct DefaultCurrentPathProvider<SE: ShellExecutable> {
     private let shellExecutor: SE
     var currentPath: String {
         try! shellExecutor.execute("pwd").get().trimmingCharacters(in: .newlines)
