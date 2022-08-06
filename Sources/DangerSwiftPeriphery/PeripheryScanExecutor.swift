@@ -41,9 +41,3 @@ extension PeripheryScanExecutor where SE == ShellExecutor {
         shellExecutor = .init()
     }
 }
-
-extension PeripheryScanExecutor {
-    struct Error: Swift.Error, CustomStringConvertible {
-        let description: String
-    }
-}
