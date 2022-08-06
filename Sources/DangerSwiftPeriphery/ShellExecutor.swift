@@ -12,16 +12,18 @@ protocol ShellExecutable {
     func execute(_ command: String, arguments: [String]) -> Result<String, CommandError>
 }
 
+extension ShellExecutable {
+    func execute(_ command: String) -> Result<String, CommandError> {
+        execute(command, arguments: [])
+    }
+}
+
 struct CommandError: Error, CustomStringConvertible {
     let status: Int32
     let description: String
 }
 
 struct ShellExecutor: ShellExecutable {
-    func execute(_ command: String) -> Result<String, CommandError> {
-        execute(command, arguments: [])
-    }
-    
     func execute(_ command: String, arguments: [String] = []) -> Result<String, CommandError> {
         let script = "\(command) \(arguments.joined(separator: " "))"
         Logger.shared.debug("command started: \(script)")
