@@ -6,7 +6,7 @@
 
 import Foundation
 
-struct DefaultCurrentPathProvider<SE: ShellExecutable> {
+struct CurrentPathProvider<SE: ShellExecutable> {
     private let shellExecutor: SE
     var currentPath: String {
         try! shellExecutor.execute("pwd").get().trimmingCharacters(in: .newlines)
@@ -17,7 +17,7 @@ struct DefaultCurrentPathProvider<SE: ShellExecutable> {
     }
 }
 
-extension DefaultCurrentPathProvider where SE == ShellExecutor {
+extension CurrentPathProvider where SE == ShellExecutor {
     init() {
         shellExecutor = .init()
     }
