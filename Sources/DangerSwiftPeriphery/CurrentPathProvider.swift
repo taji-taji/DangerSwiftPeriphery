@@ -6,19 +6,14 @@
 
 import Foundation
 
-struct CurrentPathProvider<SE: ShellExecutable> {
-    private let shellExecutor: SE
+struct CurrentPathProvider {
+    private let fileManager: FileManager
+
     var currentPath: String {
-        try! shellExecutor.execute("pwd").get().trimmingCharacters(in: .newlines)
+        fileManager.currentDirectoryPath
     }
     
-    init(shellExecutor: SE) {
-        self.shellExecutor = shellExecutor
-    }
-}
-
-extension CurrentPathProvider where SE == ShellExecutor {
-    init() {
-        shellExecutor = .init()
+    init(fileManager: FileManager = FileManager.default) {
+        self.fileManager = fileManager
     }
 }
