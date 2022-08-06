@@ -6,11 +6,7 @@
 
 import Foundation
 
-protocol CurrentPathProvidable {
-    var currentPath: String { get }
-}
-
-struct DefaultCurrentPathProvider<SE: ShellExecutable>: CurrentPathProvidable {
+struct CurrentPathProvider<SE: ShellExecutable> {
     private let shellExecutor: SE
     var currentPath: String {
         try! shellExecutor.execute("pwd").get().trimmingCharacters(in: .newlines)
@@ -21,7 +17,7 @@ struct DefaultCurrentPathProvider<SE: ShellExecutable>: CurrentPathProvidable {
     }
 }
 
-extension DefaultCurrentPathProvider where SE == ShellExecutor {
+extension CurrentPathProvider where SE == ShellExecutor {
     init() {
         shellExecutor = .init()
     }

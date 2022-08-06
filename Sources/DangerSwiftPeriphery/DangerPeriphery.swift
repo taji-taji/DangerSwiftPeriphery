@@ -42,7 +42,7 @@ public struct DangerPeriphery {
                                                          additionalArguments: arguments)
         let scanExecutor = PeripheryScanExecutor(commandBuilder: commandBuilder)
         let danger = Danger()
-        let currentPathProvider = DefaultCurrentPathProvider()
+        let currentPathProvider = CurrentPathProvider()
         let outputParser = CheckstyleOutputParser(projectRootPath: currentPathProvider.currentPath)
         
         // execute scan
