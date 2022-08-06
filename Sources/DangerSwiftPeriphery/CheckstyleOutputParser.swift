@@ -8,8 +8,6 @@
 import Foundation
 
 protocol CheckstyleOutputParsable {
-    init(projectRootPath: String)
-
     func parse(xml: String) throws -> [Violation]
 }
 

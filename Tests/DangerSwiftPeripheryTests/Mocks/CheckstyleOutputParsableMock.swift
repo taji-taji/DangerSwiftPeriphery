@@ -7,11 +7,6 @@ import Foundation
 
 final class CheckstyleOutputParsableMock: CheckstyleOutputParsable {
     var parseHandler: ((String) throws -> [Violation])?
-    var projectRootPath: String
-
-    init(projectRootPath: String) {
-        self.projectRootPath = projectRootPath
-    }
 
     func parse(xml: String) throws -> [Violation] {
         guard let handler = parseHandler else {

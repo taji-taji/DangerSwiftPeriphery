@@ -12,7 +12,7 @@ final class DangerSwiftPeripheryTests: XCTestCase {
         super.setUp()
 
         scanExecutor = PeripheryScanExecutableMock()
-        outputParser = CheckstyleOutputParsableMock(projectRootPath: DefaultCurrentPathProvider().currentPath)
+        outputParser = CheckstyleOutputParsableMock()
         diffProvider = PullRequestDiffProvidableMock()
         dangerCommentable = DangerCommentableMock()
     }
