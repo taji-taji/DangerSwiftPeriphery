@@ -89,14 +89,14 @@ public struct DangerPeriphery {
         }
     }
 
-    static func handleScanResult(_ scanResult: Result<[Violation], Error>, danger: DangerCommentable, shouldComment: Bool) {
+    static func handleScanResult<DC: DangerCommentable>(_ scanResult: Result<[Violation], Error>,
+                                                        danger: DC,
+                                                        shouldComment: Bool) {
         guard shouldComment else { return }
         switch scanResult {
         case .success(let violations):
             for violation in violations {
-                danger.warn(message: violation.message,
-                            file: violation.filePath,
-                            line: violation.line)
+                danger.warn(violation: violation)
             }
         case .failure(let error):
             danger.fail(error.localizedDescription)

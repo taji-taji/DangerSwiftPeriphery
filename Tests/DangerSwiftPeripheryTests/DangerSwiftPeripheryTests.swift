@@ -106,7 +106,7 @@ final class DangerSwiftPeripheryTests: XCTestCase {
 
     func testHandleScanResultSuccessShouldComment() {
         XCTAssertEqual(dangerCommentable.warnCallCount, 0)
-        dangerCommentable.warnHandler = { _, _, _ in  }
+        dangerCommentable.warnHandler = { _ in  }
 
         let scanResult: Result<[DangerSwiftPeriphery.Violation], Error> = .success([
             .init(filePath: "path1", line: 1, message: "1"),
@@ -133,7 +133,7 @@ final class DangerSwiftPeripheryTests: XCTestCase {
 
     func testHandleScanResultSuccessShouldNotComment() {
         XCTAssertEqual(dangerCommentable.warnCallCount, 0)
-        dangerCommentable.warnHandler = { _, _, _ in  }
+        dangerCommentable.warnHandler = { _ in  }
 
         let scanResult: Result<[DangerSwiftPeriphery.Violation], Error> = .success([
             .init(filePath: "path1", line: 1, message: "1"),

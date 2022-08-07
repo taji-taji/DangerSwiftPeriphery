@@ -1,6 +1,6 @@
 import Foundation
 
 protocol DangerCommentable {
-    func warn(message: String, file: String, line: Int)
+    func warn(violation: Violation)
     func fail(_ message: String)
 }

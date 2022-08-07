@@ -6,17 +6,17 @@ import Foundation
 @testable import DangerSwiftPeriphery
 
 final class DangerCommentableMock: DangerCommentable {
-    var warnHandler: ((String, String, Int) -> Void)?
+    var warnHandler: ((Violation) -> Void)?
     var failHandler: ((String) -> Void)?
     private(set) var warnCallCount = 0
     private(set) var failCallCount = 0
 
-    func warn(message: String, file: String, line: Int) {
+    func warn(violation: Violation) {
         warnCallCount += 1
         guard let handler = warnHandler else {
             fatalError("warnHandler is nil.")
         }
-        handler(message, file, line)
+        handler(violation)
     }
 
     func fail(_ message: String) {

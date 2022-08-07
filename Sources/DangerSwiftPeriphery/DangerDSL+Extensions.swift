@@ -1,6 +1,12 @@
 import Danger
 
-extension DangerDSL: DangerCommentable {}
+extension DangerDSL: DangerCommentable {
+    func warn(violation: Violation) {
+        warn(message: violation.message,
+             file: violation.filePath,
+             line: violation.line)
+    }
+}
 
 extension DangerDSL: PullRequestDiffProvidable {
     func diff(forFile file: String) -> Result<FileDiff.Changes, Error> {
