@@ -61,21 +61,16 @@ public struct DangerPeriphery {
                         scanExecutor: PSE,
                         outputParser: OP,
                         diffProvider: DP) -> Result<[Violation], Error> {
-        do {
+        Result {
             let output = try scanExecutor.execute()
             let allViolations = try outputParser.parse(xml: output)
-            let violationsForComment = allViolations.filter { isViolationIncludedInInsertions($0, diffProvider: diffProvider) }
-            return .success(violationsForComment)
-        } catch {
-            return .failure(error)
+            let violationsForComment = try allViolations.filter({ try isViolationIncludedInInsertions($0, diffProvider: diffProvider) })
+            return violationsForComment
         }
     }
 
-    static func isViolationIncludedInInsertions(_ violation: Violation, diffProvider: PullRequestDiffProvidable) -> Bool {
-        let result = diffProvider.diff(forFile: violation.filePath)
-        guard let changes = try? result.get() else {
-            return false
-        }
+    static func isViolationIncludedInInsertions(_ violation: Violation, diffProvider: PullRequestDiffProvidable) throws -> Bool {
+        let changes = try diffProvider.diff(forFile: violation.filePath)
         // comment only `Created files` and `Files that have been modified and are contained within hunk`
         switch changes {
         case .created:
