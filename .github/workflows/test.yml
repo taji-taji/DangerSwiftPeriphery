@@ -20,8 +20,6 @@ jobs:
           - xcode: "13.2.1"
             macos: macos-12
     runs-on: ${{ matrix.macos }}
-    env:
-      GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -31,6 +29,12 @@ jobs:
         id: get-swift-version
         run: |
           echo "::set-output name=version::$(swift -version | head -n 1 | sed s/,// )"
+      - name: Danger
+        uses: danger/swift@3.3.0
+        with:
+          args: --failOnErrors --no-publish-check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
