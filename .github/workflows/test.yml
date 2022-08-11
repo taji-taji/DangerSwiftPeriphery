@@ -30,9 +30,7 @@ jobs:
         run: |
           echo "::set-output name=version::$(swift -version | head -n 1 | sed s/,// )"
       - name: Danger
-        uses: danger/swift@3.3.0
-        with:
-          args: --failOnErrors --no-publish-check
+        run: swift run danger-swift ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Cache dependencies
