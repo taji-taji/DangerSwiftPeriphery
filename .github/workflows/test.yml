@@ -30,7 +30,9 @@ jobs:
         run: |
           echo "::set-output name=version::$(swift -version | head -n 1 | sed s/,// )"
       - name: Danger
-        run: swift run danger-swift ci
+        run: |
+          brew install danger/tap/danger-swift
+          danger-swift ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Cache dependencies
