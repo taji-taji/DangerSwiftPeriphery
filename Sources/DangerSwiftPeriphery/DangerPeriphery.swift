@@ -7,7 +7,7 @@
 
 import Danger
 
-public struct DangerPeriphery {
+public enum DangerPeriphery {
     @discardableResult
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             @PeripheryArgumentsBuilder arguments: () -> [String],
