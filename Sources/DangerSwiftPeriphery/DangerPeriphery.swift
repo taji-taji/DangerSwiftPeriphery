@@ -7,17 +7,7 @@
 
 import Danger
 
-public struct DangerPeriphery {
-    @discardableResult
-    public static func scan(peripheryExecutable: String = "swift run periphery",
-                            shouldComment: Bool = true,
-                            verbose: Bool = false) -> Result<[Violation] , Error> {
-        scan(peripheryExecutable: peripheryExecutable,
-             arguments: [] as [String],
-             shouldComment: shouldComment,
-             verbose: verbose)
-    }
-
+public enum DangerPeriphery {
     @discardableResult
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             @PeripheryArgumentsBuilder arguments: () -> [String],
@@ -42,7 +32,7 @@ public struct DangerPeriphery {
 
     @discardableResult
     public static func scan(peripheryExecutable: String = "swift run periphery",
-                            arguments: [String],
+                            arguments: [String] = [],
                             shouldComment: Bool = true,
                             verbose: Bool = false) -> Result<[Violation] , Error> {
         Logger.shared.verbose = verbose
