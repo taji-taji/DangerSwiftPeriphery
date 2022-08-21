@@ -73,9 +73,9 @@ jobs:
             .build/artifacts
             .build/checkouts
             .build/repositories
-          key: ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}-${{ env.cache_version }}-spm-deps-${{ hashFiles('Package.resolved') }}
+          key: ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}}-spm-deps-${{ hashFiles('Package.resolved') }}
           restore-keys: |
-            ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}-${{ env.cache_version }}-spm-deps-
+            ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}-spm-deps-
       - name: Test
         run: swift test
 
