@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  build:
+  macOS:
     strategy:
       fail-fast: false
       matrix:
@@ -20,6 +20,7 @@ jobs:
           - xcode: "13.2.1"
             macos: macos-12
     runs-on: ${{ matrix.macos }}
+    name: macOS
     env:
       GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
     steps:
@@ -42,6 +43,41 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-dependencies-${{ matrix.xcode }}-${{ hashFiles('**/Package.resolved') }}
             ${{ runner.os }}-dependencies-${{ matrix.xcode }}-
+      - name: Test
+        run: swift test
+  linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        swift: ["5.6", "5.5"]
+        include:
+          - swift: "5.6"
+            container: "swift:5.6"
+            cache-version: 2
+          - swift: "5.5"
+            container: "swift:5.5"
+            cache-version: 2
+    runs-on: ubuntu-latest
+    container: ${{ matrix.container }}
+    name: Linux
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Get Swift Version
+        id: get-swift-version
+        run: |
+          echo "::set-output name=version::$(swift -version | head -n 1 | sed s/,// )"
+        shell: bash
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            .build/artifacts
+            .build/checkouts
+            .build/repositories
+          key: ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}}-spm-deps-${{ hashFiles('Package.resolved') }}
+          restore-keys: |
+            ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}-spm-deps-
       - name: Test
         run: swift test
 
