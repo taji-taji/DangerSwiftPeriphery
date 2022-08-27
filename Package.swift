@@ -5,9 +5,19 @@ import PackageDescription
 
 let isDevelop = true
 
+let developProducts: [Product] = isDevelop ? [
+    .library(
+        name: "DangerDeps",
+        type: .dynamic,
+        targets: ["DangerDependencies"])
+] : []
+
 let developTargets: [Target] = isDevelop ? [
     .testTarget(
         name: "DangerSwiftPeripheryTests",
+        dependencies: ["DangerSwiftPeriphery"]),
+    .target(
+        name: "DangerDependencies",
         dependencies: ["DangerSwiftPeriphery"]),
 ] : []
 
@@ -17,7 +27,7 @@ let package = Package(
         .library(
             name: "DangerSwiftPeriphery",
             targets: ["DangerSwiftPeriphery"]),
-    ],
+    ] + developProducts,
     dependencies: [
         .package(url: "https://github.com/danger/swift.git", from: "3.0.0"),
         .package(url: "https://github.com/peripheryapp/periphery", from: "2.0.0")
