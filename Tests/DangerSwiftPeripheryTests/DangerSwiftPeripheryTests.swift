@@ -164,12 +164,8 @@ final class DangerSwiftPeripheryTests: XCTestCase {
             .created(addedLines: [])
         }
 
-        do {
-            let result = try DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
-            XCTAssertTrue(result)
-        } catch {
-            XCTFail("unexpected error: \(error.localizedDescription)")
-        }
+        let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
+        XCTAssertTrue(result)
     }
 
     func testIsViolationReturnsFalseWhenTheViolationIsIncludedInRenamed() {
@@ -178,12 +174,8 @@ final class DangerSwiftPeripheryTests: XCTestCase {
             .renamed(oldPath: "test2", hunks: [])
         }
 
-        do {
-            let result = try DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
-            XCTAssertFalse(result)
-        } catch {
-            XCTFail("unexpected error: \(error.localizedDescription)")
-        }
+        let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
+        XCTAssertFalse(result)
     }
 
     func testIsViolationReturnsFalseWhenTheViolationIsIncludedInDeleted() {
@@ -192,12 +184,8 @@ final class DangerSwiftPeripheryTests: XCTestCase {
             .deleted(deletedLines: [])
         }
 
-        do {
-            let result = try DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
-            XCTAssertFalse(result)
-        } catch {
-            XCTFail("unexpected error: \(error.localizedDescription)")
-        }
+        let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
+        XCTAssertFalse(result)
     }
 
     func testIsViolationReturnsTrueWhenTheViolationIsIncludedInModifiedAndTheirHunks() {
@@ -206,12 +194,8 @@ final class DangerSwiftPeripheryTests: XCTestCase {
             .modified(hunks: [.init(oldLineRange: 1 ..< 2, newLineRange: 1 ..< 4)])
         }
 
-        do {
-            let result = try DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
-            XCTAssertTrue(result)
-        } catch {
-            XCTFail("unexpected error: \(error.localizedDescription)")
-        }
+        let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
+        XCTAssertTrue(result)
     }
 
     func testIsViolationReturnsFalseWhenTheViolationIsIncludedInModifiedAndNotIncludedInTheirHunks() {
@@ -223,13 +207,18 @@ final class DangerSwiftPeripheryTests: XCTestCase {
             ])
         }
 
-        do {
-            let result = try DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
-            XCTAssertFalse(result)
-        } catch {
-            XCTFail("unexpected error: \(error.localizedDescription)")
+        let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
+        XCTAssertFalse(result)
+    }
+
+    func testIsViolationReturnsFalseWhenErrorOccurred() {
+        let violation = DangerSwiftPeriphery.Violation(filePath: "test1", line: 3, message: "")
+        diffProvider.diffHandler = { _ in
+            throw TestError.diffError
         }
 
+        let result = DangerPeriphery.isViolationIncludedInInsertions(violation, diffProvider: diffProvider)
+        XCTAssertFalse(result)
     }
 }
 
@@ -237,5 +226,6 @@ private extension DangerSwiftPeripheryTests {
     enum TestError: Error {
         case scanError
         case parseError
+        case diffError
     }
 }
