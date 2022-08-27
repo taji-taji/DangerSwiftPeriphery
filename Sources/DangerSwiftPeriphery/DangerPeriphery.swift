@@ -64,22 +64,27 @@ public enum DangerPeriphery {
         Result {
             let output = try scanExecutor.execute()
             let allViolations = try outputParser.parse(xml: output)
-            let violationsForComment = try allViolations.filter({ try isViolationIncludedInInsertions($0, diffProvider: diffProvider) })
+            let violationsForComment = allViolations.filter({ isViolationIncludedInInsertions($0, diffProvider: diffProvider) })
             return violationsForComment
         }
     }
 
-    static func isViolationIncludedInInsertions(_ violation: Violation, diffProvider: PullRequestDiffProvidable) throws -> Bool {
-        let changes = try diffProvider.diff(forFile: violation.filePath)
-        // comment only `Created files` and `Files that have been modified and are contained within hunk`
-        switch changes {
-        case .created:
-            return true
-        case .deleted:
-            return false
-        case let .modified(hunks):
-            return hunks.contains(where: { $0.newLineRange.contains(violation.line) })
-        case .renamed:
+    static func isViolationIncludedInInsertions(_ violation: Violation, diffProvider: PullRequestDiffProvidable) -> Bool {
+        do {
+            let changes = try diffProvider.diff(forFile: violation.filePath)
+            // comment only `Created files` and `Files that have been modified and are contained within hunk`
+            switch changes {
+            case .created:
+                return true
+            case .deleted:
+                return false
+            case let .modified(hunks):
+                return hunks.contains(where: { $0.newLineRange.contains(violation.line) })
+            case .renamed:
+                return false
+            }
+        } catch {
+            Logger.shared.debug(error.localizedDescription)
             return false
         }
     }
