@@ -3,6 +3,14 @@
 
 import PackageDescription
 
+let isDevelop = true
+
+let developTargets: [Target] = isDevelop ? [
+    .testTarget(
+        name: "DangerSwiftPeripheryTests",
+        dependencies: ["DangerSwiftPeriphery"]),
+] : []
+
 let package = Package(
     name: "DangerSwiftPeriphery",
     products: [
@@ -21,8 +29,5 @@ let package = Package(
                 .product(name: "Danger", package: "swift"),
                 .product(name: "periphery", package: "periphery"),
             ]),
-        .testTarget(
-            name: "DangerSwiftPeripheryTests",
-            dependencies: ["DangerSwiftPeriphery"]),
-    ]
+    ] + developTargets
 )
