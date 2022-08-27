@@ -53,7 +53,7 @@ jobs:
           git push origin release/${{ steps.create-next-version.outputs.NEXT_VERSION }}
       - name: Create Release
         run: |
-          gh release create --generate-notes --target release/${{ steps.create-next-version.outputs.NEXT_VERSION }}
+          gh release create ${{ steps.create-next-version.outputs.NEXT_VERSION }} --generate-notes --target release/${{ steps.create-next-version.outputs.NEXT_VERSION }}
       - name: Delete Release Branch
         run: |
           git push --delete origin release/${{ steps.create-next-version.outputs.NEXT_VERSION }}
