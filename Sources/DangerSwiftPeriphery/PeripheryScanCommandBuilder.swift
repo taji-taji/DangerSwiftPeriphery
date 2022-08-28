@@ -15,7 +15,7 @@ struct PeripheryScanCommandBuilder {
         "--quiet",
         "--disable-update-check"
     ]
-    
+
     var command: String {
         // override --format, --quiet, --disable-update-check
         var overrideArguments: [String] = additionalArguments
@@ -27,10 +27,10 @@ struct PeripheryScanCommandBuilder {
             "--quiet",
             "--disable-update-check"
         ]
-        
+
         return peripheryExecutable + " scan " + overrideArguments.joined(separator: " ")
     }
-    
+
     init(peripheryExecutable: String,
          additionalArguments: [String]) {
         self.peripheryExecutable = peripheryExecutable

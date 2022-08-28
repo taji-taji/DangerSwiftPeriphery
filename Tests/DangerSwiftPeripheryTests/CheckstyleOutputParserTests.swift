@@ -10,7 +10,7 @@ import XCTest
 
 final class CheckstyleOutputParserTests: XCTestCase {
     private var outputParser: CheckstyleOutputParser!
-    
+
     override func setUpWithError() throws {
         outputParser = CheckstyleOutputParser(projectRootPath: "/path/to")
     }
@@ -35,7 +35,7 @@ final class CheckstyleOutputParserTests: XCTestCase {
 
         do {
             let violations = try outputParser.parse(xml: xmlString)
-            
+
             XCTAssertEqual(violations.count, 3)
             XCTAssertEqual(violations[0].filePath, "file1")
             XCTAssertEqual(violations[0].line, 1)
@@ -50,7 +50,7 @@ final class CheckstyleOutputParserTests: XCTestCase {
             XCTFail("Unexpected error: \(error)")
         }
     }
-    
+
     func testInvalidCheckstyleXML() throws {
         let xmlString = """
         <?xml version="1.0" encoding="utf-8"?>
@@ -64,7 +64,7 @@ final class CheckstyleOutputParserTests: XCTestCase {
 
         do {
             _ = try outputParser.parse(xml: xmlString)
-            
+
             XCTFail("parse must fail")
         } catch let error as CheckstyleOutputParser.Error {
             switch error {

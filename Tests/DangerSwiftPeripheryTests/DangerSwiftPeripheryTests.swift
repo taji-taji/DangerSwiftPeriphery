@@ -45,7 +45,7 @@ final class DangerSwiftPeripheryTests: XCTestCase {
             XCTFail("Unexpected result")
         }
     }
-    
+
     func testScanErrorOccurredWhileParsingResult() throws {
         scanExecutor.executeHandler = {
             "test"

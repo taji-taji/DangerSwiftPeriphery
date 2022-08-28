@@ -15,13 +15,13 @@ struct PeripheryScanExecutor<SE: ShellExecutable>: PeripheryScanExecutable {
     private let commandBuilder: PeripheryScanCommandBuilder
     private let shellExecutor: SE
     private let warnPrefix = "warning: "
-    
+
     init(commandBuilder: PeripheryScanCommandBuilder,
          shellExecutor: SE) {
         self.commandBuilder = commandBuilder
         self.shellExecutor = shellExecutor
     }
-    
+
     func execute() throws -> String {
         switch shellExecutor.execute(commandBuilder.command) {
         case .success(let output):

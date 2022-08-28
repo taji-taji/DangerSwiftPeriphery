@@ -12,7 +12,7 @@ struct CurrentPathProvider {
     var currentPath: String {
         fileManager.currentDirectoryPath
     }
-    
+
     init(fileManager: FileManager = FileManager.default) {
         self.fileManager = fileManager
     }

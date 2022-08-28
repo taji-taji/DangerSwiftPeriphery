@@ -9,7 +9,7 @@ let developProducts: [Product] = isDevelop ? [
     .library(
         name: "DangerDeps",
         type: .dynamic,
-        targets: ["DangerDependencies"])
+        targets: ["DangerDependencies"]),
 ] : []
 
 let developTargets: [Target] = isDevelop ? [
