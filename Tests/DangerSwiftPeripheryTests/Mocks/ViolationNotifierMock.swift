@@ -5,7 +5,7 @@
 import Foundation
 @testable import DangerSwiftPeriphery
 
-final class DangerCommentableMock: DangerCommentable {
+final class ViolationNotifierMock: ViolationNotifier {
     var warnHandler: ((Violation) -> Void)?
     var failHandler: ((String) -> Void)?
     private(set) var warnCallCount = 0

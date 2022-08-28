@@ -6,7 +6,7 @@ final class DangerSwiftPeripheryTests: XCTestCase {
     private var scanExecutor: PeripheryScanExecutableMock!
     private var outputParser: CheckstyleOutputParsableMock!
     private var diffProvider: PullRequestDiffProvidableMock!
-    private var dangerCommentable: DangerCommentableMock!
+    private var dangerCommentable: ViolationNotifierMock!
 
     override func setUp() {
         super.setUp()
@@ -14,7 +14,7 @@ final class DangerSwiftPeripheryTests: XCTestCase {
         scanExecutor = PeripheryScanExecutableMock()
         outputParser = CheckstyleOutputParsableMock()
         diffProvider = PullRequestDiffProvidableMock()
-        dangerCommentable = DangerCommentableMock()
+        dangerCommentable = ViolationNotifierMock()
     }
 
     func testScanErrorOccurredWhileScanning() throws {

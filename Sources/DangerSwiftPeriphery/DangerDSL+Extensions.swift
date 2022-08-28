@@ -1,6 +1,6 @@
 import Danger
 
-extension DangerDSL: DangerCommentable {
+extension DangerDSL: ViolationNotifier {
     func warn(violation: Violation) {
         warn(message: violation.message,
              file: violation.filePath,
