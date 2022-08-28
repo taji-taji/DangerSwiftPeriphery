@@ -53,7 +53,7 @@ jobs:
           git push origin release/${{ steps.create-next-version.outputs.NEXT_VERSION }}
       - name: Create PR
         run: |
-          gh pr create --base main
+          gh pr create --base main --title "Release ${{ steps.create-next-version.outputs.NEXT_VERSION }}" --body "Release ${{ steps.create-next-version.outputs.NEXT_VERSION }}"
       - name: Create Release
         run: |
           gh release create ${{ steps.create-next-version.outputs.NEXT_VERSION }} --generate-notes --target release/${{ steps.create-next-version.outputs.NEXT_VERSION }}
