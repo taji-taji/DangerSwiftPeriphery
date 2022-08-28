@@ -11,7 +11,7 @@ final class ShellExecutorTests: XCTestCase {
     }
 
     func testExecutePeriphery() throws {
-        let result = shellExecutor.execute("swift run periphery", arguments: ["version"])
+        let result = shellExecutor.execute("swift", arguments: ["--version"])
         switch result {
         case .success:
             break

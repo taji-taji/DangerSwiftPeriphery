@@ -30,8 +30,16 @@ struct ShellExecutor: ShellExecutable {
 
         let env = ProcessInfo.processInfo.environment
         let task = Process()
-        task.executableURL = URL(fileURLWithPath: env["SHELL"] ?? "")
-        task.arguments = ["-l", "-c", script]
+
+        #if os(macOS)
+            task.executableURL = URL(fileURLWithPath: env["SHELL"] ?? "")
+            task.arguments = ["-l", "-c", script]
+        #else
+            task.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+            task.arguments = [script]
+        #endif
+
+        task.environment = ProcessInfo.processInfo.environment
         task.currentDirectoryPath = FileManager.default.currentDirectoryPath
 
         let outputPipe = Pipe()
