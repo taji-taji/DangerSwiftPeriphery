@@ -30,7 +30,7 @@ struct ShellExecutor: ShellExecutable {
 
         let env = ProcessInfo.processInfo.environment
         let task = Process()
-        task.launchPath = env["SHELL"]
+        task.executableURL = URL(fileURLWithPath: env["SHELL"] ?? "")
         task.arguments = ["-l", "-c", script]
         task.currentDirectoryPath = FileManager.default.currentDirectoryPath
 
@@ -38,18 +38,22 @@ struct ShellExecutor: ShellExecutable {
         let errorPipe = Pipe()
         task.standardOutput = outputPipe
         task.standardError = errorPipe
-        task.launch()
-        task.waitUntilExit()
 
-        let outputMessage = String(data: outputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)
-        let errorMessage = String(data: errorPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)
+        do {
+            try task.run()
+            task.waitUntilExit()
+            let outputMessage = String(data: outputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)
+            let errorMessage = String(data: errorPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)
 
-        let status = task.terminationStatus
-        if status == 0 {
-            Logger.shared.debug("command output: " + outputMessage!)
-            return .success(outputMessage!)
-        } else {
-            return .failure(.init(status: status, description: errorMessage!))
+            let status = task.terminationStatus
+            if status == 0 {
+                Logger.shared.debug("command output: " + outputMessage!)
+                return .success(outputMessage!)
+            } else {
+                return .failure(.init(status: status, description: errorMessage!))
+            }
+        } catch {
+            return .failure(.init(status: 1, description: error.localizedDescription))
         }
     }
 }

@@ -23,6 +23,7 @@ let developTargets: [Target] = isDevelop ? [
 
 let package = Package(
     name: "DangerSwiftPeriphery",
+    platforms: [.macOS(.v10_13)],
     products: [
         .library(
             name: "DangerSwiftPeriphery",
