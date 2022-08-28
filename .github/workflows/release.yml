@@ -57,11 +57,10 @@ jobs:
       - name: Create Release
         run: |
           gh release create ${{ steps.create-next-version.outputs.NEXT_VERSION }} --generate-notes --target release/${{ steps.create-next-version.outputs.NEXT_VERSION }}
-      - name: Restore isDevelop Commit & Push & Merge
+      - name: Restore isDevelop Commit & Push
         run: |
           sed -i -e 's/let isDevelop = false/let isDevelop = true/' Package.swift
           git add Package.swift
           git commit -m 'Restore isDevelop flag'
           git push origin release/${{ steps.create-next-version.outputs.NEXT_VERSION }}
-          gh pr merge --admin --merge --delete-branch
 
