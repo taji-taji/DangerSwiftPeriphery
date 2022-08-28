@@ -18,17 +18,17 @@ struct PeripheryScanCommandBuilder {
     
     var command: String {
         // override --format, --quiet, --disable-update-check
-        var overridedArguments: [String] = additionalArguments
-        overridedArguments.removeAll(where: { argument -> Bool in
+        var overrideArguments: [String] = additionalArguments
+        overrideArguments.removeAll(where: { argument -> Bool in
             overrideArgumentKeys.contains(where: { argument.hasPrefix($0) })
         })
-        overridedArguments += [
+        overrideArguments += [
             "--format checkstyle",
             "--quiet",
             "--disable-update-check"
         ]
         
-        return peripheryExecutable + " scan " + overridedArguments.joined(separator: " ")
+        return peripheryExecutable + " scan " + overrideArguments.joined(separator: " ")
     }
     
     init(peripheryExecutable: String,
