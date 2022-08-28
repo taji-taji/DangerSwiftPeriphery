@@ -12,7 +12,7 @@ public enum DangerPeriphery {
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             @PeripheryArgumentsBuilder arguments: () -> [String],
                             shouldComment: Bool = true,
-                            verbose: Bool = false) -> Result<[Violation] , Error> {
+                            verbose: Bool = false) -> Result<[Violation], Error> {
         scan(peripheryExecutable: peripheryExecutable,
              arguments: arguments(),
              shouldComment: shouldComment,
@@ -23,7 +23,7 @@ public enum DangerPeriphery {
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             arguments: [PeripheryArguments],
                             shouldComment: Bool = true,
-                            verbose: Bool = false) -> Result<[Violation] , Error> {
+                            verbose: Bool = false) -> Result<[Violation], Error> {
         scan(peripheryExecutable: peripheryExecutable,
              arguments: arguments.map { $0.optionString },
              shouldComment: shouldComment,
@@ -34,7 +34,7 @@ public enum DangerPeriphery {
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             arguments: [String] = [],
                             shouldComment: Bool = true,
-                            verbose: Bool = false) -> Result<[Violation] , Error> {
+                            verbose: Bool = false) -> Result<[Violation], Error> {
         Logger.shared.verbose = verbose
 
         // make dependencies
@@ -44,17 +44,17 @@ public enum DangerPeriphery {
         let danger = Danger()
         let currentPathProvider = CurrentPathProvider()
         let outputParser = CheckstyleOutputParser(projectRootPath: currentPathProvider.currentPath)
-        
+
         // execute scan
         let result = self.scan(scanExecutor: scanExecutor,
                                outputParser: outputParser,
                                diffProvider: danger)
-        
+
         // handle scan result
         handleScanResult(result, danger: danger, shouldComment: shouldComment)
         return result
     }
-    
+
     static func scan<PSE: PeripheryScanExecutable,
                      OP: CheckstyleOutputParsable,
                      DP: PullRequestDiffProvidable>(

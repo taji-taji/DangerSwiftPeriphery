@@ -11,7 +11,7 @@ import XCTest
 final class PeripheryScanExecutorTests: XCTestCase {
     private var executor: PeripheryScanExecutable!
     private var commandBuilder: PeripheryScanCommandBuilder!
-    
+
     override func setUpWithError() throws {
         commandBuilder = PeripheryScanCommandBuilder(peripheryExecutable: "", additionalArguments: [])
     }
@@ -27,7 +27,7 @@ final class PeripheryScanExecutorTests: XCTestCase {
         }
         executor = PeripheryScanExecutor(commandBuilder: commandBuilder,
                                          shellExecutor: shellExecutor)
-        
+
         do {
             _ = try executor.execute()
             XCTFail("Must throw error.")
@@ -40,7 +40,7 @@ final class PeripheryScanExecutorTests: XCTestCase {
             }
         }
     }
-    
+
     func testExecuteSucceed() throws {
         let shellExecutor = ShellExecutableMock()
         shellExecutor.executeHandler = { _, _ in
@@ -54,7 +54,7 @@ final class PeripheryScanExecutorTests: XCTestCase {
 
         executor = PeripheryScanExecutor(commandBuilder: commandBuilder,
                                          shellExecutor: shellExecutor)
-        
+
         do {
             let output = try executor.execute()
             let expected = """
@@ -63,13 +63,13 @@ final class PeripheryScanExecutorTests: XCTestCase {
             test3
             test4
             """
-            
+
             XCTAssertEqual(output, expected)
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
     }
-    
+
     func testExecuteSucceedWithWarning() throws {
         let shellExecutor = ShellExecutableMock()
         shellExecutor.executeHandler = { _, _ in
@@ -84,7 +84,7 @@ final class PeripheryScanExecutorTests: XCTestCase {
         }
         executor = PeripheryScanExecutor(commandBuilder: commandBuilder,
                                          shellExecutor: shellExecutor)
-        
+
         do {
             let output = try executor.execute()
             let expected = """
@@ -93,7 +93,7 @@ final class PeripheryScanExecutorTests: XCTestCase {
             test3
             test4
             """
-            
+
             XCTAssertEqual(output, expected)
         } catch {
             XCTFail("Unexpected error: \(error)")

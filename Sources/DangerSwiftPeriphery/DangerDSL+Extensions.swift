@@ -18,7 +18,7 @@ extension DangerDSL: PullRequestDiffProvidable {
                          return .created(addedLines: addedLines)
                      case let .renamed(oldPath, hunks):
                          return .renamed(oldPath: oldPath,
-                                         hunks: hunks.map { .init(from: $0) } )
+                                         hunks: hunks.map { .init(from: $0) })
                      case let .modified(hunks):
                          return .modified(hunks: hunks.map { .init(from: $0) })
                      case let .deleted(deletedLines):
