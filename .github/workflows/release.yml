@@ -51,9 +51,17 @@ jobs:
           git add Package.swift
           git commit -m 'Change isDevelop flag to release ${{ steps.create-next-version.outputs.NEXT_VERSION }}'
           git push origin release/${{ steps.create-next-version.outputs.NEXT_VERSION }}
+      - name: Create PR
+        run: |
+          gh pr create --base main
       - name: Create Release
         run: |
           gh release create ${{ steps.create-next-version.outputs.NEXT_VERSION }} --generate-notes --target release/${{ steps.create-next-version.outputs.NEXT_VERSION }}
-      - name: Delete Release Branch
+      - name: Restore isDevelop Commit & Push & Merge
         run: |
-          git push --delete origin release/${{ steps.create-next-version.outputs.NEXT_VERSION }}
+          sed -i -e 's/let isDevelop = false/let isDevelop = true/' Package.swift
+          git add Package.swift
+          git commit -m 'Restore isDevelop flag'
+          git push origin release/${{ steps.create-next-version.outputs.NEXT_VERSION }}
+          gh pr merge --admin --merge --delete-branch
+
