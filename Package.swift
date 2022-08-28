@@ -37,7 +37,6 @@ let package = Package(
             name: "DangerSwiftPeriphery",
             dependencies: [
                 .product(name: "Danger", package: "swift"),
-                .product(name: "periphery", package: "periphery"),
             ]),
     ] + developTargets
 )
