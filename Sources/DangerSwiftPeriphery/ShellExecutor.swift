@@ -30,7 +30,13 @@ struct ShellExecutor: ShellExecutable {
 
         let env = ProcessInfo.processInfo.environment
         let task = Process()
+
+        #if os(macOS)
         task.launchPath = env["SHELL"]
+        #else
+        task.launchPath = "/bin/sh"
+        #endif
+
         task.arguments = ["-l", "-c", script]
         task.currentDirectoryPath = FileManager.default.currentDirectoryPath
 
