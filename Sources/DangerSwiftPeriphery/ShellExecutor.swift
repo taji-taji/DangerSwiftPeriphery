@@ -39,7 +39,7 @@ struct ShellExecutor: ShellExecutable {
 
         task.arguments = ["-l", "-c", script]
         task.environment = env
-        task.currentDirectoryPath = FileManager.default.currentDirectoryPath
+        task.currentDirectoryURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
 
         let outputPipe = Pipe()
         let errorPipe = Pipe()
