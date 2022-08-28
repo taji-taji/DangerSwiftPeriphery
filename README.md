@@ -4,7 +4,8 @@
 
 
 ![Test](https://github.com/taji-taji/DangerSwiftPeriphery/actions/workflows/test.yml/badge.svg)
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
+[![MIT License](https://img.shields.io/github/license/taji-taji/DangerSwiftPeriphery)](https://github.com/taji-taji/DangerSwiftPeriphery/blob/main/LICENSE)
+[![Latest Version](https://img.shields.io/github/v/release/taji-taji/DangerSwiftPeriphery?label=latest%20version)](https://github.com/taji-taji/DangerSwiftPeriphery/releases/latest)
 
 ## Features
 
