@@ -25,6 +25,20 @@ This plugin will comment unreferenced code detected by periphery via Danger Swif
 
 ### Package.swift
 
+1. Add DangerSwiftPeriphery to your `Package.swift`  dependencies:
+
+    ```swift
+    .package(url: "https://github.com/taji-taji/DangerSwiftPeriphery.git", from: "1.0.0")
+    ```
+
+2. Add DangerSwiftPeriphery to your dependencies of `DangerDependencies` target:
+
+    ```swift
+    .product(name: "DangerSwiftPeriphery", package: "DangerSwiftPeriphery")
+    ```
+
+The following is an example of `Package.swift` in its entirety.
+
 ```swift
 let package = Package(
     // ...
@@ -32,7 +46,7 @@ let package = Package(
         // Danger
         .package(url: "https://github.com/danger/swift.git", from: "3.0.0"), // dev
         // Danger Plugins
-        // Add the line below.
+        // 1. Add DangerSwiftPeriphery to your `Package.swift`  dependencies:
         .package(url: "https://github.com/taji-taji/DangerSwiftPeriphery.git", from: "1.0.0"), // dev
     ],
     targets: [
@@ -41,7 +55,8 @@ let package = Package(
         .target(name: "DangerDependencies",
                 dependencies: [
                     .product(name: "Danger", package: "swift"),
-                    "DangerSwiftPeriphery",
+                    // 2. Add DangerSwiftPeriphery to your dependencies of `DangerDependencies` target:
+                    .product(name: "DangerSwiftPeriphery", package: "DangerSwiftPeriphery"), 
                 ]),
         // ...
     ]
