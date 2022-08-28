@@ -89,9 +89,9 @@ public enum DangerPeriphery {
         }
     }
 
-    static func handleScanResult<DC: DangerCommentable>(_ scanResult: Result<[Violation], Error>,
-                                                        danger: DC,
-                                                        shouldComment: Bool) {
+    static func handleScanResult<Notifier: ViolationNotifier>(_ scanResult: Result<[Violation], Error>,
+                                                              danger: Notifier,
+                                                              shouldComment: Bool) {
         guard shouldComment else { return }
         switch scanResult {
         case .success(let violations):
