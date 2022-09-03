@@ -92,6 +92,15 @@
         }
       },
       {
+        "package": "SwiftShell",
+        "repositoryURL": "https://github.com/taji-taji/swift-shell.git",
+        "state": {
+          "branch": null,
+          "revision": "027bf36be072c802e392570602bd1442e6dd77d0",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "SwiftSyntax",
         "repositoryURL": "https://github.com/peripheryapp/swift-syntax",
         "state": {

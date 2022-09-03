@@ -1,11 +1,5 @@
-//
-//  ShellExecutor.swift
-//  
-//
-//  Created by 多鹿豊 on 2022/03/31.
-//
-
 import Foundation
+import SwiftShell
 
 protocol ShellExecutable {
     func execute(_ command: String) -> Result<String, CommandError>
@@ -18,44 +12,23 @@ extension ShellExecutable {
     }
 }
 
-struct CommandError: Error, CustomStringConvertible {
-    let status: Int32
-    let description: String
+enum CommandError: Error {
+    case unknown(error: Error)
+    case standard(exitCode: Int32, description: String)
 }
 
-struct ShellExecutor: ShellExecutable {
+extension Shell: ShellExecutable {
     func execute(_ command: String, arguments: [String] = []) -> Result<String, CommandError> {
         let script = "\(command) \(arguments.joined(separator: " "))"
         Logger.shared.debug("command started: \(script)")
-
-        let env = ProcessInfo.processInfo.environment
-        let task = Process()
-
-        #if os(macOS)
-        task.launchPath = env["SHELL"]
-        #else
-        task.launchPath = "/bin/sh"
-        #endif
-
-        task.arguments = ["-l", "-c", script]
-        task.currentDirectoryPath = FileManager.default.currentDirectoryPath
-
-        let outputPipe = Pipe()
-        let errorPipe = Pipe()
-        task.standardOutput = outputPipe
-        task.standardError = errorPipe
-        task.launch()
-        task.waitUntilExit()
-
-        let outputMessage = String(data: outputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)
-        let errorMessage = String(data: errorPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)
-
-        let status = task.terminationStatus
-        if status == 0 {
-            Logger.shared.debug("command output: " + outputMessage!)
-            return .success(outputMessage!)
-        } else {
-            return .failure(.init(status: status, description: errorMessage!))
+        do {
+            let output = try callAsFunction(command, arguments: arguments)
+            Logger.shared.debug("command output: " + output)
+            return .success(output)
+        } catch let error as ShellError {
+            return .failure(.standard(exitCode: error.exitStatus, description: error.description))
+        } catch {
+            return .failure(.unknown(error: error))
         }
     }
 }

@@ -1,13 +1,14 @@
 import XCTest
+import SwiftShell
 @testable import DangerSwiftPeriphery
 
-final class ShellExecutorTests: XCTestCase {
-    private var shellExecutor: ShellExecutor!
+final class PeripheryExecutionTests: XCTestCase {
+    private var shellExecutor: Shell!
 
     override func setUpWithError() throws {
         try super.setUpWithError()
 
-        shellExecutor = ShellExecutor()
+        shellExecutor = .init()
     }
 
     func testExecutePeriphery() throws {
