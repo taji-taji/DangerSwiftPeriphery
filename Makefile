@@ -1,5 +1,6 @@
 SWIFT = $(shell which swift)
 DEV_TOOLS_BUILD_FLAGS = --configuration release --package-path ./DevTools
+XCBEAUTIFY_EXECUTABLE = ./DevTools/.build/release/xcbeautify
 
 .PHONY: dev
 dev:
@@ -7,4 +8,4 @@ dev:
 
 .PHONY: test
 test:
-	$(SWIFT) test 2>&1 | xcbeautify
+	$(SWIFT) test 2>&1 | $(XCBEAUTIFY_EXECUTABLE)

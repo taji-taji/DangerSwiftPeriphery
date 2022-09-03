@@ -30,6 +30,20 @@ jobs:
         id: get-swift-version
         run: |
           echo "::set-output name=version::$(swift -version | head -n 1 | sed s/,// )"
+      - name: Cache DevTools
+        uses: actions/cache@v2
+        with:
+          path: |
+            ./DevTools/.build/release
+          key: ${{ runner.os }}-DevTools-${{ matrix.xcode }}-${{ hashFiles('./DevTools/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-DevTools-${{ matrix.xcode }}-${{ hashFiles('./DevTools/Package.resolved') }}
+            ${{ runner.os }}-DevTools-${{ matrix.xcode }}-
+      - name: Install DevTools
+        run: |
+          if [ ! -e ./DevTools/.build/release/xcbeautify ]; then
+            make dev
+          fi
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
@@ -37,12 +51,12 @@ jobs:
             .build/artifacts
             .build/checkouts
             .build/repositories
-          key: ${{ runner.os }}-dependencies-${{ matrix.xcode }}-${{ hashFiles('**/Package.resolved') }}
+          key: ${{ runner.os }}-dependencies-${{ matrix.xcode }}-${{ hashFiles('./Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-dependencies-${{ matrix.xcode }}-${{ hashFiles('**/Package.resolved') }}
+            ${{ runner.os }}-dependencies-${{ matrix.xcode }}-${{ hashFiles('./Package.resolved') }}
             ${{ runner.os }}-dependencies-${{ matrix.xcode }}-
       - name: Test
-        run: swift test
+        run: make test
   linux:
     strategy:
       fail-fast: false
@@ -66,6 +80,20 @@ jobs:
         run: |
           echo "::set-output name=version::$(swift -version | head -n 1 | sed s/,// )"
         shell: bash
+      - name: Cache DevTools
+        uses: actions/cache@v2
+        with:
+          path: |
+            ./DevTools/.build/release
+          key: ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}}-DevTools-${{ hashFiles('./DevTools/Package.resolved') }}
+          restore-keys: |
+            ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}}-DevTools-${{ hashFiles('./DevTools/Package.resolved') }}
+            ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}}-DevTools-
+      - name: Install DevTools
+        run: |
+          if [ ! -e ./DevTools/.build/release/xcbeautify ]; then
+            make dev
+          fi
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
