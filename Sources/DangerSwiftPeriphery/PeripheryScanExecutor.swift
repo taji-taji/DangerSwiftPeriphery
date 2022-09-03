@@ -1,11 +1,5 @@
-//
-//  PeripheryScanExecutor.swift
-//  
-//
-//  Created by 多鹿豊 on 2022/04/09.
-//
-
 import Foundation
+import SwiftShell
 
 protocol PeripheryScanExecutable {
     func execute() throws -> String
@@ -35,7 +29,7 @@ struct PeripheryScanExecutor<SE: ShellExecutable>: PeripheryScanExecutable {
     }
 }
 
-extension PeripheryScanExecutor where SE == ShellExecutor {
+extension PeripheryScanExecutor where SE == Shell {
     init(commandBuilder: PeripheryScanCommandBuilder) {
         self.commandBuilder = commandBuilder
         shellExecutor = .init()
