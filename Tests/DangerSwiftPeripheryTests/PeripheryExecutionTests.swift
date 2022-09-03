@@ -1,7 +1,8 @@
 import XCTest
+import ShellExecutor
 @testable import DangerSwiftPeriphery
 
-final class ShellExecutorTests: XCTestCase {
+final class PeripheryExecutionTests: XCTestCase {
     private var shellExecutor: ShellExecutor!
 
     override func setUpWithError() throws {

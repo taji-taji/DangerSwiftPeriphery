@@ -23,7 +23,7 @@ final class PeripheryScanExecutorTests: XCTestCase {
     func testExecuteThrowCommandError() throws {
         let shellExecutor = ShellExecutableMock()
         shellExecutor.executeHandler = { _, _ in
-            .failure(.init(status: 9999, description: "test error"))
+            .failure(.standard(exitCode: 9999, description: "test error"))
         }
         executor = PeripheryScanExecutor(commandBuilder: commandBuilder,
                                          shellExecutor: shellExecutor)
@@ -32,9 +32,9 @@ final class PeripheryScanExecutorTests: XCTestCase {
             _ = try executor.execute()
             XCTFail("Must throw error.")
         } catch {
-            if let error = error as? CommandError {
-                XCTAssertEqual(error.status, 9999)
-                XCTAssertEqual(error.description, "test error")
+            if case let .standard(exitCode, description) = error as? CommandError {
+                XCTAssertEqual(exitCode, 9999)
+                XCTAssertEqual(description, "test error")
             } else {
                 XCTFail("Unexpected error.")
             }

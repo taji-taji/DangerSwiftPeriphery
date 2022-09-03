@@ -30,7 +30,8 @@ let package = Package(
     ] + developProducts,
     dependencies: [
         .package(url: "https://github.com/danger/swift.git", from: "3.0.0"),
-        .package(url: "https://github.com/peripheryapp/periphery", from: "2.0.0")
+        .package(url: "https://github.com/peripheryapp/periphery", from: "2.0.0"),
+        .package(url: "https://github.com/taji-taji/swift-shell-executor.git", from: "1.0.0"),
     ],
     targets: [
         .target(
@@ -38,6 +39,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Danger", package: "swift"),
                 .product(name: "periphery", package: "periphery"),
+                .product(name: "ShellExecutor", package: "swift-shell-executor"),
             ]),
     ] + developTargets
 )

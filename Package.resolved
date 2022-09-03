@@ -92,6 +92,15 @@
         }
       },
       {
+        "package": "ShellExecutor",
+        "repositoryURL": "https://github.com/taji-taji/swift-shell-executor.git",
+        "state": {
+          "branch": null,
+          "revision": "01e5f3b89f6671e5bd6cc0959bc8cac7b9090301",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "SwiftSyntax",
         "repositoryURL": "https://github.com/peripheryapp/swift-syntax",
         "state": {
