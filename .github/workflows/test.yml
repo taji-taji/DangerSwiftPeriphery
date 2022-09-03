@@ -105,5 +105,5 @@ jobs:
           restore-keys: |
             ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}-spm-deps-
       - name: Test
-        run: swift test
+        run: make test
 
