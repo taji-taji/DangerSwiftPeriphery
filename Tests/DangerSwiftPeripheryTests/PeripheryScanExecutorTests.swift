@@ -1,10 +1,3 @@
-//
-//  PeripheryScanExecutorTests.swift
-//  
-//
-//  Created by 多鹿豊 on 2022/04/09.
-//
-
 import XCTest
 @testable import DangerSwiftPeriphery
 

@@ -1,9 +1,3 @@
-//
-//  Violation.swift
-//
-//  Created by 多鹿豊 on 2022/04/03.
-//
-
 import Foundation
 
 /// Struct representing the violation detected by `periphery scan`.

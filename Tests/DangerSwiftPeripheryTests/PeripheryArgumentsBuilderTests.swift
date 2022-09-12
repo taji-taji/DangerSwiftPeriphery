@@ -1,7 +1,3 @@
-//
-// Created by 多鹿豊 on 2022/07/27.
-//
-
 import XCTest
 @testable import DangerSwiftPeriphery
 

@@ -1,10 +1,3 @@
-//
-//  DangerPeriphery.swift
-//  
-//
-//  Created by 多鹿豊 on 2022/03/31.
-//
-
 import Danger
 
 public enum DangerPeriphery {

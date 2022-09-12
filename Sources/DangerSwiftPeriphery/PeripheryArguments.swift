@@ -1,7 +1,3 @@
-//
-// Created by 多鹿豊 on 2022/07/25.
-//
-
 import Foundation
 
 /// periphery scan command options
