@@ -1,7 +1,3 @@
-//
-// Created by 多鹿豊 on 2022/08/02.
-//
-
 import Foundation
 @testable import DangerSwiftPeriphery
 
