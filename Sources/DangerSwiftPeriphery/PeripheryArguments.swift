@@ -4,6 +4,7 @@
 
 import Foundation
 
+/// periphery scan command options
 public enum PeripheryArguments {
     case config(String)
     case workspace(String)

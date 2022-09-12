@@ -8,6 +8,24 @@
 import Danger
 
 public enum DangerPeriphery {
+    /// Run `periphery scan` to detect unused code in the diff.
+    ///
+    /// - Parameters:
+    ///   - peripheryExecutable:
+    ///     Path to periphery executable.
+    ///     By default, the Periphery shipped with DangerSwiftPeriphery is used.
+    ///     Specify this parameter if you want to use a pre-installed Periphery.
+    ///     Example: `/usr/local/bin/periphery`
+    ///   - arguments:
+    ///     periphery options.
+    ///   - shouldComment:
+    ///     Flag if you want to comment using Danger or not.
+    ///     Set to false if you want to use the return value to create your own comments, for example.
+    ///   - verbose:
+    ///     Set to true if logging is to be output.
+    /// - Returns:
+    ///   If scan succeeds, it returns a list of violations detected by Periphery.
+    ///   If scan fails, it throws an error.
     @discardableResult
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             @PeripheryArgumentsBuilder arguments: () -> [String],
@@ -19,6 +37,24 @@ public enum DangerPeriphery {
              verbose: verbose)
     }
 
+    /// Run `periphery scan` to detect unused code in the diff.
+    ///
+    /// - Parameters:
+    ///   - peripheryExecutable:
+    ///     Path to periphery executable.
+    ///     By default, the Periphery shipped with DangerSwiftPeriphery is used.
+    ///     Specify this parameter if you want to use a pre-installed Periphery.
+    ///     Example: `/usr/local/bin/periphery`
+    ///   - arguments:
+    ///     periphery options.
+    ///   - shouldComment:
+    ///     Flag if you want to comment using Danger or not.
+    ///     Set to false if you want to use the return value to create your own comments, for example.
+    ///   - verbose:
+    ///     Set to true if logging is to be output.
+    /// - Returns:
+    ///   If scan succeeds, it returns a list of violations detected by Periphery.
+    ///   If scan fails, it throws an error.
     @discardableResult
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             arguments: [PeripheryArguments],
@@ -30,6 +66,24 @@ public enum DangerPeriphery {
              verbose: verbose)
     }
 
+    /// Run `periphery scan` to detect unused code in the diff.
+    ///
+    /// - Parameters:
+    ///   - peripheryExecutable:
+    ///     Path to periphery executable.
+    ///     By default, the Periphery shipped with DangerSwiftPeriphery is used.
+    ///     Specify this parameter if you want to use a pre-installed Periphery.
+    ///     Example: `/usr/local/bin/periphery`
+    ///   - arguments:
+    ///     periphery options.
+    ///   - shouldComment:
+    ///     Flag if you want to comment using Danger or not.
+    ///     Set to false if you want to use the return value to create your own comments, for example.
+    ///   - verbose:
+    ///     Set to true if logging is to be output.
+    /// - Returns:
+    ///   If scan succeeds, it returns a list of violations detected by Periphery.
+    ///   If scan fails, it throws an error.
     @discardableResult
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             arguments: [String] = [],
