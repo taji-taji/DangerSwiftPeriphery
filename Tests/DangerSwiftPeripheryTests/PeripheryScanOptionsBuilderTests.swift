@@ -1,16 +1,16 @@
 import XCTest
 @testable import DangerSwiftPeriphery
 
-final class PeripheryArgumentsBuilderTests: XCTestCase {
+final class PeripheryScanOptionsBuilderTests: XCTestCase {
     private let trueCondition = true
     private let falseCondition = false
 
     func testBuildBlock() {
         assert({
-            PeripheryArguments.config("/path/to/config")
-            PeripheryArguments.workspace("test-workspace")
-            PeripheryArguments.schemes(["scheme1", "scheme2"])
-            PeripheryArguments.skipBuild
+            PeripheryScanOptions.config("/path/to/config")
+            PeripheryScanOptions.workspace("test-workspace")
+            PeripheryScanOptions.schemes(["scheme1", "scheme2"])
+            PeripheryScanOptions.skipBuild
         }, expected: [
             "--config /path/to/config",
             "--workspace test-workspace",
@@ -21,12 +21,12 @@ final class PeripheryArgumentsBuilderTests: XCTestCase {
 
     func testBuildOptionalTrueCondition() {
         assert({
-            PeripheryArguments.config("/path/to/config")
-            PeripheryArguments.workspace("test-workspace")
+            PeripheryScanOptions.config("/path/to/config")
+            PeripheryScanOptions.workspace("test-workspace")
             if trueCondition {
-                PeripheryArguments.schemes(["scheme1", "scheme2"])
+                PeripheryScanOptions.schemes(["scheme1", "scheme2"])
             }
-            PeripheryArguments.skipBuild
+            PeripheryScanOptions.skipBuild
         }, expected: [
             "--config /path/to/config",
             "--workspace test-workspace",
@@ -37,12 +37,12 @@ final class PeripheryArgumentsBuilderTests: XCTestCase {
 
     func testBuildOptionalFalseCondition() {
         assert({
-            PeripheryArguments.config("/path/to/config")
-            PeripheryArguments.workspace("test-workspace")
+            PeripheryScanOptions.config("/path/to/config")
+            PeripheryScanOptions.workspace("test-workspace")
             if falseCondition {
-                PeripheryArguments.schemes(["scheme1", "scheme2"])
+                PeripheryScanOptions.schemes(["scheme1", "scheme2"])
             }
-            PeripheryArguments.skipBuild
+            PeripheryScanOptions.skipBuild
         }, expected: [
             "--config /path/to/config",
             "--workspace test-workspace",
@@ -52,14 +52,14 @@ final class PeripheryArgumentsBuilderTests: XCTestCase {
 
     func testBuildEitherFirst() {
         assert({
-            PeripheryArguments.config("/path/to/config")
-            PeripheryArguments.workspace("test-workspace")
+            PeripheryScanOptions.config("/path/to/config")
+            PeripheryScanOptions.workspace("test-workspace")
             if trueCondition {
-                PeripheryArguments.schemes(["scheme1", "scheme2"])
+                PeripheryScanOptions.schemes(["scheme1", "scheme2"])
             } else {
-                PeripheryArguments.schemes(["scheme3", "scheme4"])
+                PeripheryScanOptions.schemes(["scheme3", "scheme4"])
             }
-            PeripheryArguments.skipBuild
+            PeripheryScanOptions.skipBuild
         }, expected: [
             "--config /path/to/config",
             "--workspace test-workspace",
@@ -70,14 +70,14 @@ final class PeripheryArgumentsBuilderTests: XCTestCase {
 
     func testBuildEitherSecond() {
         assert({
-            PeripheryArguments.config("/path/to/config")
-            PeripheryArguments.workspace("test-workspace")
+            PeripheryScanOptions.config("/path/to/config")
+            PeripheryScanOptions.workspace("test-workspace")
             if falseCondition {
-                PeripheryArguments.schemes(["scheme1", "scheme2"])
+                PeripheryScanOptions.schemes(["scheme1", "scheme2"])
             } else {
-                PeripheryArguments.schemes(["scheme3", "scheme4"])
+                PeripheryScanOptions.schemes(["scheme3", "scheme4"])
             }
-            PeripheryArguments.skipBuild
+            PeripheryScanOptions.skipBuild
         }, expected: [
             "--config /path/to/config",
             "--workspace test-workspace",
@@ -87,8 +87,8 @@ final class PeripheryArgumentsBuilderTests: XCTestCase {
     }
 }
 
-private extension PeripheryArgumentsBuilderTests {
-    func assert(@PeripheryArgumentsBuilder _ arguments: () -> [String], expected: [String]) {
+private extension PeripheryScanOptionsBuilderTests {
+    func assert(@PeripheryScanOptionsBuilder _ arguments: () -> [String], expected: [String]) {
         XCTAssertEqual(arguments(), expected)
     }
 }

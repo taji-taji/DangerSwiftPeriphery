@@ -1,9 +1,9 @@
 import XCTest
 @testable import DangerSwiftPeriphery
 
-final class PeripheryArgumentsTests: XCTestCase {
-    func testPeripheryArgumentsOptionsString() {
-        var optionStringTable: [(target: PeripheryArguments, expected: String)] {
+final class PeripheryScanOptionsTests: XCTestCase {
+    func testPeripheryScanOptions() {
+        var optionStringTable: [(target: PeripheryScanOptions, expected: String)] {
             [
                 (.config("/path/to/config"), "--config /path/to/config"),
                 (.workspace("test-workspace"), "--workspace test-workspace"),

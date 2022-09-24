@@ -92,27 +92,27 @@ DangerPeriphery.scan(arguments: [
     "--skip-build"
 ])
 
-// or use PeripheryArguments enum as array
+// or use PeripheryScanOptions enum as array
 DangerPeriphery.scan(arguments: [
-    PeripheryArguments.workspace("MaApp.xcworkspace"),
-    PeripheryArguments.schemes(["MyApp"]),
-    PeripheryArguments.indexStorePath("/path/to/index/store"),
-    PeripheryArguments.skipBuild
+    PeripheryScanOptions.workspace("MaApp.xcworkspace"),
+    PeripheryScanOptions.schemes(["MyApp"]),
+    PeripheryScanOptions.indexStorePath("/path/to/index/store"),
+    PeripheryScanOptions.skipBuild
 ])
 
-// or use PeripheryArguments enum with resultBuilder
+// or use PeripheryScanOptions enum with resultBuilder
 DangerPeriphery.scan {
-    PeripheryArguments.workspace("MaApp.xcworkspace")
-    PeripheryArguments.schemes(["MyApp"])
-    PeripheryArguments.indexStorePath("/path/to/index/store")
-    PeripheryArguments.skipBuild
+    PeripheryScanOptions.workspace("MaApp.xcworkspace")
+    PeripheryScanOptions.schemes(["MyApp"])
+    PeripheryScanOptions.indexStorePath("/path/to/index/store")
+    PeripheryScanOptions.skipBuild
 }
 
 // All three scan methods above behave the same.
 ```
 
 In the future, if a new option is added to Periphery, and it is undefined in this plugin, you can use `.custom`.
-For example, if a new version of Periphery adds an option `--new-option` that is undefined in `PeripheryArguments` of this plugin, you can use `PeripheryArguments.custom("--new-option foo")` to use `--new-option`.
+For example, if a new version of Periphery adds an option `--new-option` that is undefined in `PeripheryScanOptions` of this plugin, you can use `PeripheryScanOptions.custom("--new-option foo")` to use `--new-option`.
 
 #### Handle scan result manually
 

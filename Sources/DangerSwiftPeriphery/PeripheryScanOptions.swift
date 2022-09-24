@@ -1,7 +1,10 @@
 import Foundation
 
+@available(*, deprecated, renamed: "PeripheryScanOptions")
+public typealias PeripheryArguments = PeripheryScanOptions
+
 /// periphery scan command options
-public enum PeripheryArguments {
+public enum PeripheryScanOptions {
     case config(String)
     case workspace(String)
     case project(String)
@@ -24,7 +27,7 @@ public enum PeripheryArguments {
     case custom(String)
 }
 
-extension PeripheryArguments {
+extension PeripheryScanOptions {
     var optionString: String {
         if case let .custom(value) = self {
             return value
@@ -39,7 +42,7 @@ extension PeripheryArguments {
     }
 }
 
-private extension PeripheryArguments {
+private extension PeripheryScanOptions {
     var key: String {
         let reflection = Mirror(reflecting: self)
         guard reflection.displayStyle == .enum,
