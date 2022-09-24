@@ -21,7 +21,7 @@ public enum DangerPeriphery {
     ///   If scan fails, it throws an error.
     @discardableResult
     public static func scan(peripheryExecutable: String = "swift run periphery",
-                            @PeripheryArgumentsBuilder arguments: () -> [String],
+                            @PeripheryScanOptionsBuilder arguments: () -> [String],
                             shouldComment: Bool = true,
                             verbose: Bool = false) -> Result<[Violation], Error> {
         scan(peripheryExecutable: peripheryExecutable,

@@ -1,7 +1,7 @@
 import XCTest
 @testable import DangerSwiftPeriphery
 
-final class PeripheryArgumentsBuilderTests: XCTestCase {
+final class PeripheryScanOptionsBuilderTests: XCTestCase {
     private let trueCondition = true
     private let falseCondition = false
 
@@ -87,8 +87,8 @@ final class PeripheryArgumentsBuilderTests: XCTestCase {
     }
 }
 
-private extension PeripheryArgumentsBuilderTests {
-    func assert(@PeripheryArgumentsBuilder _ arguments: () -> [String], expected: [String]) {
+private extension PeripheryScanOptionsBuilderTests {
+    func assert(@PeripheryScanOptionsBuilder _ arguments: () -> [String], expected: [String]) {
         XCTAssertEqual(arguments(), expected)
     }
 }

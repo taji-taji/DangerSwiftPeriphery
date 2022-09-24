@@ -1,7 +1,7 @@
 import Foundation
 
 @resultBuilder
-public struct PeripheryArgumentsBuilder {
+public struct PeripheryScanOptionsBuilder {
     public static func buildBlock(_ components: PeripheryScanOptions...) -> [PeripheryScanOptions] {
         components
     }
