@@ -11,8 +11,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        xcode: ["13.4.1", "13.3.1", "13.2.1"]
+        xcode: ["14.0.1", "13.4.1", "13.3.1", "13.2.1"]
         include:
+          - xcode: "14.0.1"
+            macos: macos-12
           - xcode: "13.4.1"
             macos: macos-12
           - xcode: "13.3.1"
@@ -61,8 +63,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        swift: ["5.6", "5.5"]
+        swift: ["5.7", "5.6", "5.5"]
         include:
+          - swift: "5.7"
+            container: "swift:5.7"
+            cache-version: 1
           - swift: "5.6"
             container: "swift:5.6"
             cache-version: 2
@@ -89,6 +94,11 @@ jobs:
           restore-keys: |
             ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}}-DevTools-${{ hashFiles('./DevTools/Package.resolved') }}
             ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}}-DevTools-
+      - name: Install make command
+        run: |
+          if ! command -v make /dev/null; then
+            apt-get update && apt-get install make
+          fi
       - name: Install DevTools
         run: |
           if [ ! -e ./DevTools/.build/release/xcbeautify ]; then
@@ -106,4 +116,3 @@ jobs:
             ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}-spm-deps-
       - name: Test
         run: make test
-
