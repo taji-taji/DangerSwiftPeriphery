@@ -1,5 +1,8 @@
 import Foundation
 
+@available(*, deprecated, renamed: "PeripheryScanOptionsBuilder")
+public typealias PeripheryArgumentsBuilder = PeripheryScanOptionsBuilder
+
 @resultBuilder
 public struct PeripheryScanOptionsBuilder {
     public static func buildBlock(_ components: PeripheryScanOptions...) -> [PeripheryScanOptions] {

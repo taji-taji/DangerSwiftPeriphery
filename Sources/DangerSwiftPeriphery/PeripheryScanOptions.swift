@@ -1,5 +1,8 @@
 import Foundation
 
+@available(*, deprecated, renamed: "PeripheryScanOptions")
+public typealias PeripheryArguments = PeripheryScanOptions
+
 /// periphery scan command options
 public enum PeripheryScanOptions {
     case config(String)
