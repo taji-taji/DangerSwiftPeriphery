@@ -94,6 +94,12 @@ jobs:
           restore-keys: |
             ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}}-DevTools-${{ hashFiles('./DevTools/Package.resolved') }}
             ${{ matrix.cache-version }}-${{ runner.os }}-${{ steps.get-swift-version.outputs.version }}}-DevTools-
+      - name: Install make command
+        run: |
+          if which make >/dev/null; then
+          else
+            apt-get update && apt-get install make
+          fi
       - name: Install DevTools
         run: |
           if [ ! -e ./DevTools/.build/release/xcbeautify ]; then
