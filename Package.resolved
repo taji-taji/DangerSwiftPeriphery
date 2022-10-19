@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/nerdishbynature/octokit.swift",
         "state": {
           "branch": null,
-          "revision": "9521cdff919053868ab13cd08a228f7bc1bde2a9",
-          "version": "0.11.0"
+          "revision": "f762f1566f7cd0e683b9329f169c28ab6ef993cc",
+          "version": "0.12.0"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/nerdishbynature/RequestKit.git",
         "state": {
           "branch": null,
-          "revision": "fd5e9e99aada7432170366c9e95967011ce13bad",
-          "version": "2.4.0"
+          "revision": "8b0258ea2a4345cbcac90509b764faacea12efb0",
+          "version": "3.2.1"
         }
       },
       {
@@ -69,8 +69,8 @@
         "repositoryURL": "https://github.com/danger/swift.git",
         "state": {
           "branch": null,
-          "revision": "0d62144a8bdfdb087c476ac3e88e96491c158a7b",
-          "version": "3.14.0"
+          "revision": "579323889f26e6fb1ddb2cc5d98b1ab698bd2578",
+          "version": "3.14.2"
         }
       },
       {
