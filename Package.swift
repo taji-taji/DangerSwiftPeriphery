@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -21,8 +21,21 @@ let developTargets: [Target] = isDevelop ? [
         dependencies: ["DangerSwiftPeriphery"]),
 ] : []
 
+#if compiler(>=5.7)
+let dependencies: [Package.Dependency] = [
+    .package(url: "https://github.com/peripheryapp/periphery", from: "2.10.3"),
+]
+#else
+let dependencies: [Package.Dependency] = [
+    .package(url: "https://github.com/peripheryapp/periphery", "2.0.0" ..< "2.10.0"),
+]
+#endif
+
 let package = Package(
     name: "DangerSwiftPeriphery",
+    platforms: [
+        .macOS(.v12),
+    ],
     products: [
         .library(
             name: "DangerSwiftPeriphery",
@@ -30,9 +43,8 @@ let package = Package(
     ] + developProducts,
     dependencies: [
         .package(url: "https://github.com/danger/swift.git", from: "3.0.0"),
-        .package(url: "https://github.com/peripheryapp/periphery", from: "2.0.0"),
         .package(url: "https://github.com/taji-taji/swift-shell.git", from: "1.0.0"),
-    ],
+    ] + dependencies,
     targets: [
         .target(
             name: "DangerSwiftPeriphery",
