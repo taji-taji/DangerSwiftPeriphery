@@ -29,15 +29,15 @@ jobs:
     name: macOS
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Select Xcode version
         run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app; swift -version
       - name: Get Swift Version
         id: get-swift-version
         run: |
-          echo "::set-output name=version::$(swift -version | head -n 1 | sed s/,// )"
+          echo "version=$(swift -version | head -n 1 | sed s/,// )" >> $GITHUB_OUTPUT
       - name: Cache DevTools
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ./DevTools/.build/release
@@ -51,7 +51,7 @@ jobs:
             make dev
           fi
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             .build/artifacts
@@ -83,14 +83,14 @@ jobs:
     name: Linux
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Get Swift Version
         id: get-swift-version
         run: |
-          echo "::set-output name=version::$(swift -version | head -n 1 | sed s/,// )"
+          echo "version=$(swift -version | head -n 1 | sed s/,// )" >> $GITHUB_OUTPUT
         shell: bash
       - name: Cache DevTools
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ./DevTools/.build/release
@@ -109,7 +109,7 @@ jobs:
             make dev
           fi
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             .build/artifacts

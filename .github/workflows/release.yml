@@ -28,14 +28,14 @@ jobs:
         run: |
           release=$(gh release list --limit 1)
           release_array=($release)
-          echo "::set-output name=LATEST_VERSION::${release_array[0]}"
+          echo "LATEST_VERSION=${release_array[0]}" >> $GITHUB_OUTPUT
       - name: Create Next Version
         id: create-next-version
         run: |
           latest_version=${{ steps.fetch-latest-release.outputs.LATEST_VERSION }}
           incremental_level=${{ inputs.version_incremental_level }}
           next_version=$(semver ${latest_version} -i ${incremental_level})
-          echo "::set-output name=NEXT_VERSION::${next_version}"
+          echo "NEXT_VERSION=${next_version}" >> $GITHUB_OUTPUT
       - name: Create Release Branch
         run: |
           git switch -c release/${{ steps.create-next-version.outputs.NEXT_VERSION }}
