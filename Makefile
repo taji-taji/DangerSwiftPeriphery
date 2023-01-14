@@ -1,6 +1,7 @@
 SWIFT = $(shell which swift)
 DEV_TOOLS_BUILD_FLAGS = --configuration release --package-path ./DevTools
 XCBEAUTIFY_EXECUTABLE = ./DevTools/.build/release/xcbeautify
+SHELL=/bin/bash
 
 .PHONY: dev
 dev:
