@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   macOS:
     strategy:
