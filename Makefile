@@ -8,4 +8,4 @@ dev:
 
 .PHONY: test
 test:
-	$(SWIFT) test 2>&1 | $(XCBEAUTIFY_EXECUTABLE)
+	set -eo pipefail && $(SWIFT) test 2>&1 | $(XCBEAUTIFY_EXECUTABLE)
