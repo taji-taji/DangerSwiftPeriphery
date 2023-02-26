@@ -110,9 +110,14 @@ public enum DangerPeriphery {
                         diffProvider: DP) -> Result<[Violation], Error> {
         Result {
             let output = try scanExecutor.execute()
+            do {
             let allViolations = try outputParser.parse(xml: output)
             let violationsForComment = allViolations.filter({ isViolationIncludedInInsertions($0, diffProvider: diffProvider) })
             return violationsForComment
+            } catch {
+                print(error)
+                return []
+                }
         }
     }
 
