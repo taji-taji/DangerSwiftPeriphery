@@ -17,7 +17,7 @@ This plugin will comment unreferenced code detected by periphery via Danger Swif
 
 ## Requirements
 
-- Swift 5.5.2 or later
+- Swift 5.8 or later
 
 ## Usage
 
