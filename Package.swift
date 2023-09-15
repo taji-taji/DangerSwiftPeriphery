@@ -46,4 +46,3 @@ let package = Package(
             ]),
     ] + developTargets
 )
-
