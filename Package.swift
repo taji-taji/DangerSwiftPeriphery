@@ -21,7 +21,6 @@ let developTargets: [Target] = isDevelop ? [
         dependencies: ["DangerSwiftPeriphery"]),
 ] : []
 
-
 let package = Package(
     name: "DangerSwiftPeriphery",
     platforms: [
