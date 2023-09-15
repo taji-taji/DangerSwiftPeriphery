@@ -11,20 +11,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        xcode: ["14.2", "14.1", "14.0.1", "13.4.1", "13.3.1", "13.2.1"]
+        xcode: ["14.3.1"]
         include:
-          - xcode: "14.2"
-            macos: macos-12
-          - xcode: "14.1"
-            macos: macos-12
-          - xcode: "14.0.1"
-            macos: macos-12
-          - xcode: "13.4.1"
-            macos: macos-12
-          - xcode: "13.3.1"
-            macos: macos-12
-          - xcode: "13.2.1"
-            macos: macos-12
+          - xcode: "14.3.1"
+            macos: macos-13
     runs-on: ${{ matrix.macos }}
     name: macOS
     steps:
@@ -67,17 +57,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        swift: ["5.7", "5.6", "5.5"]
+        swift: ["5.8"]
         include:
-          - swift: "5.7"
-            container: "swift:5.7"
+          - swift: "5.8"
+            container: "swift:5.8"
             cache-version: 1
-          - swift: "5.6"
-            container: "swift:5.6"
-            cache-version: 2
-          - swift: "5.5"
-            container: "swift:5.5"
-            cache-version: 2
     runs-on: ubuntu-latest
     container: ${{ matrix.container }}
     name: Linux
