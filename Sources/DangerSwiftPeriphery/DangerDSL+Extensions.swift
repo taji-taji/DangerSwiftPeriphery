@@ -9,8 +9,21 @@ extension DangerDSL: ViolationNotifier {
 }
 
 extension DangerDSL: PullRequestDiffProvidable {
+    private var sourceBranch: String {
+        if let github = github {
+            return "\(github.pullRequest.base.sha)..\(github.pullRequest.head.sha)"
+        } else if let gitLab = gitLab {
+            return gitLab.mergeRequest.targetBranch
+        } else if let bitbucketCloud = bitbucketCloud {
+            return bitbucketCloud.pr.destination.branchName
+        } else if let bitbucketServer = bitbucketServer {
+            return bitbucketServer.pullRequest.fromRef.displayId
+        }
+        return ""
+    }
+
     func diff(forFile file: String) throws -> FileDiff.Changes {
-        try utils.diff(forFile: file, sourceBranch: sourceBranch())
+        try utils.diff(forFile: file, sourceBranch: sourceBranch)
                  .map {
                      Logger.shared.debug("changes for \(file):\($0.changes)")
                      switch $0.changes {
@@ -26,19 +39,6 @@ extension DangerDSL: PullRequestDiffProvidable {
                      }
                  }
                  .get()
-    }
-
-    private func sourceBranch() -> String {
-        if let github = github {
-            return "origin/\(github.pullRequest.base.ref)..HEAD"
-        } else if let gitLab = gitLab {
-            return gitLab.mergeRequest.targetBranch
-        } else if let bitbucketCloud = bitbucketCloud {
-            return bitbucketCloud.pr.destination.branchName
-        } else if let bitbucketServer = bitbucketServer {
-            return bitbucketServer.pullRequest.fromRef.displayId
-        }
-        return ""
     }
 }
 
