@@ -35,69 +35,69 @@ extension PeripheryScanOptions {
     var optionString: String {
         switch self {
         case .config(let config):
-            "--config \(config)"
+            return "--config \(config)"
         case .workspace(let workspace):
-            "--workspace \(workspace)"
+            return "--workspace \(workspace)"
         case .project(let project):
-            "--project \(project)"
+            return "--project \(project)"
         case .schemes(let schemes):
-            schemes
+            return schemes
                 .map({ "--schemes \($0)" })
                 .joined(separator: " ")
         case .targets(let targets):
-            targets
+            return targets
                 .map({ "--targets \($0)" })
                 .joined(separator: " ")
         case .indexExclude(let indexes):
-            indexes
+            return indexes
                 .map({ "--index-exclude \($0)" })
                 .joined(separator: " ")
         case .reportExclude(let reports):
-            reports
+            return reports
                 .map({ "--report-exclude \($0)" })
                 .joined(separator: " ")
         case .reportInclude(let reports):
-            reports
+            return reports
                 .map({ "--report-include \($0)" })
                 .joined(separator: " ")
         case .indexStorePath(let path):
-            "--index-store-path \(path)"
+            return "--index-store-path \(path)"
         case .retainPublic:
-            "--retain-public"
+            return "--retain-public"
         case .disableRedundantPublicAnalysis:
-            "--disable-redundant-public-analysis"
+            return "--disable-redundant-public-analysis"
         case .retainAssignOnlyProperties:
-            "--retain-assign-only-properties"
+            return "--retain-assign-only-properties"
         case .retainAssignOnlyPropertyTypes(let types):
-            types
+            return types
                 .map({ "--retain-assign-only-property-types \($0)" })
                 .joined(separator: " ")
         case .externalEncodableProtocols(let protocols):
-            protocols
+            return protocols
                 .map({ "--external-encodable-protocols \($0)" })
                 .joined(separator: " ")
         case .externalTestCaseClasses(let classes):
-            classes
+            return classes
                 .map({ "--external-test-case-classes \($0)" })
                 .joined(separator: " ")
         case .retainObjcAccessible:
-            "--retain-objc-accessible"
+            return "--retain-objc-accessible"
         case .retainObjcAnnotated:
-            "--retain-objc-annotated"
+            return "--retain-objc-annotated"
         case .retainUnusedProtocolFuncParams:
-            "--retain-unused-protocol-func-params"
+            return "--retain-unused-protocol-func-params"
         case .cleanBuild:
-            "--clean-build"
+            return "--clean-build"
         case .retainSwiftUIPreviews:
-            "--retain-swift-ui-previews"
+            return "--retain-swift-ui-previews"
         case .skipBuild:
-            "--skip-build"
+            return "--skip-build"
         case .relativeResults:
-            "--relative-results"
+            return "--relative-results"
         case .strict:
-            "--strict"
+            return "--strict"
         case .custom(let option):
-            option
+            return option
         }
     }
 }
