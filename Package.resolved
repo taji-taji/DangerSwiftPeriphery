@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/peripheryapp/periphery",
       "state" : {
-        "revision" : "5182b803cd852276203ee3e3b5af753acde16d0f",
-        "version" : "2.15.0"
+        "revision" : "1a06cd8deb85c933bbcf7ac5b4f0a788250f9903",
+        "version" : "2.17.1"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/danger/swift.git",
       "state" : {
-        "revision" : "0a4b52f4518974cbd2cc45c29d33cb54a303f81d",
-        "version" : "3.15.0"
+        "revision" : "ac400f78c3c0de5b886a2b88f67a26e055548c46",
+        "version" : "3.18.0"
       }
     },
     {
@@ -77,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-argument-parser",
       "state" : {
-        "revision" : "fddd1c00396eed152c45a46bea9f47b98e59301d",
-        "version" : "1.2.0"
+        "revision" : "c8ed701b513cf5177118a175d85fbbbcd707ab41",
+        "version" : "1.3.0"
       }
     },
     {
@@ -111,10 +111,10 @@
     {
       "identity" : "swift-syntax",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/peripheryapp/swift-syntax",
+      "location" : "https://github.com/apple/swift-syntax",
       "state" : {
-        "revision" : "56ef324e094ad1e655ae7d8c8dabadc7e6bd64e9",
-        "version" : "1.0.2"
+        "revision" : "6ad4ea24b01559dde0773e3d091f1b9e36175036",
+        "version" : "509.0.2"
       }
     },
     {
@@ -140,8 +140,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/tuist/xcodeproj",
       "state" : {
-        "revision" : "b6de1bfe021b861c94e7c83821b595083f74b997",
-        "version" : "8.8.0"
+        "revision" : "447c159b0c5fb047a024fd8d942d4a76cf47dde0",
+        "version" : "8.16.0"
       }
     },
     {
@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jpsim/Yams",
       "state" : {
-        "revision" : "01835dc202670b5bb90d07f3eae41867e9ed29f6",
-        "version" : "5.0.1"
+        "revision" : "0d9ee7ea8c4ebd4a489ad7a73d5c6cad55d6fed3",
+        "version" : "5.0.6"
       }
     }
   ],
