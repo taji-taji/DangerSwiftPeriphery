@@ -19,64 +19,85 @@ public enum PeripheryScanOptions {
     case retainAssignOnlyProperties
     case retainAssignOnlyPropertyTypes([String])
     case externalEncodableProtocols([String])
+    case externalTestCaseClasses([String])
     case retainObjcAccessible
+    case retainObjcAnnotated
     case retainUnusedProtocolFuncParams
     case cleanBuild
+    case retainSwiftUIPreviews
     case skipBuild
+    case relativeResults
     case strict
     case custom(String)
 }
 
 extension PeripheryScanOptions {
     var optionString: String {
-        if case let .custom(value) = self {
-            return value
-        }
-        if values.isEmpty {
-            return key
-        } else {
-            return values
-                .map { [key, $0].joined(separator: " ") }
+        switch self {
+        case .config(let config):
+            return "--config \(config)"
+        case .workspace(let workspace):
+            return "--workspace \(workspace)"
+        case .project(let project):
+            return "--project \(project)"
+        case .schemes(let schemes):
+            return schemes
+                .map({ "--schemes \($0)" })
                 .joined(separator: " ")
+        case .targets(let targets):
+            return targets
+                .map({ "--targets \($0)" })
+                .joined(separator: " ")
+        case .indexExclude(let indexes):
+            return indexes
+                .map({ "--index-exclude \($0)" })
+                .joined(separator: " ")
+        case .reportExclude(let reports):
+            return reports
+                .map({ "--report-exclude \($0)" })
+                .joined(separator: " ")
+        case .reportInclude(let reports):
+            return reports
+                .map({ "--report-include \($0)" })
+                .joined(separator: " ")
+        case .indexStorePath(let path):
+            return "--index-store-path \(path)"
+        case .retainPublic:
+            return "--retain-public"
+        case .disableRedundantPublicAnalysis:
+            return "--disable-redundant-public-analysis"
+        case .retainAssignOnlyProperties:
+            return "--retain-assign-only-properties"
+        case .retainAssignOnlyPropertyTypes(let types):
+            return types
+                .map({ "--retain-assign-only-property-types \($0)" })
+                .joined(separator: " ")
+        case .externalEncodableProtocols(let protocols):
+            return protocols
+                .map({ "--external-encodable-protocols \($0)" })
+                .joined(separator: " ")
+        case .externalTestCaseClasses(let classes):
+            return classes
+                .map({ "--external-test-case-classes \($0)" })
+                .joined(separator: " ")
+        case .retainObjcAccessible:
+            return "--retain-objc-accessible"
+        case .retainObjcAnnotated:
+            return "--retain-objc-annotated"
+        case .retainUnusedProtocolFuncParams:
+            return "--retain-unused-protocol-func-params"
+        case .cleanBuild:
+            return "--clean-build"
+        case .retainSwiftUIPreviews:
+            return "--retain-swift-ui-previews"
+        case .skipBuild:
+            return "--skip-build"
+        case .relativeResults:
+            return "--relative-results"
+        case .strict:
+            return "--strict"
+        case .custom(let option):
+            return option
         }
-    }
-}
-
-private extension PeripheryScanOptions {
-    var key: String {
-        let reflection = Mirror(reflecting: self)
-        guard reflection.displayStyle == .enum,
-              let associated = reflection.children.first else {
-            return "--" + "\(self)".kebabCased
-        }
-        return "--" + associated.label!.kebabCased
-    }
-
-    var values: [String] {
-        let reflection = Mirror(reflecting: self)
-        guard reflection.displayStyle == .enum,
-              let associated = reflection.children.first else {
-            return []
-        }
-        switch associated.value {
-        case let value as String:
-            return [value]
-        case let values as [String]:
-            return values
-        default:
-            return []
-        }
-    }
-}
-
-private extension String {
-    var kebabCased: String {
-        let pattern = "([a-z0-9])([A-Z])"
-
-        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
-            return self
-        }
-        let range = NSRange(location: 0, length: count)
-        return regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: "$1-$2").lowercased()
     }
 }
