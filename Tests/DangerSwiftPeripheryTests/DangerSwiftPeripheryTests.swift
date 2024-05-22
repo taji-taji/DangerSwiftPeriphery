@@ -29,7 +29,8 @@ final class DangerSwiftPeripheryTests: XCTestCase {
         }
         let result = DangerPeriphery.scan(scanExecutor: scanExecutor,
                                           outputParser: outputParser,
-                                          diffProvider: diffProvider)
+                                          diffProvider: diffProvider, 
+                                          filterUnrelatedFiles: true)
         switch result {
         case .success:
             XCTFail("Unexpected success")
@@ -58,7 +59,8 @@ final class DangerSwiftPeripheryTests: XCTestCase {
         }
         let result = DangerPeriphery.scan(scanExecutor: scanExecutor,
                                           outputParser: outputParser,
-                                          diffProvider: diffProvider)
+                                          diffProvider: diffProvider,
+                                          filterUnrelatedFiles: true)
         switch result {
         case .success:
             XCTFail("Unexpected success")
@@ -95,10 +97,41 @@ final class DangerSwiftPeripheryTests: XCTestCase {
         }
         let result = DangerPeriphery.scan(scanExecutor: scanExecutor,
                                           outputParser: outputParser,
-                                          diffProvider: diffProvider)
+                                          diffProvider: diffProvider, 
+                                          filterUnrelatedFiles: true)
         switch result {
         case let .success(violationsForComment):
             XCTAssertEqual(violationsForComment.count, 0)
+        case .failure:
+            XCTFail("Unexpected error")
+        }
+    }
+
+    func testScanReturnsAllViolationsWhenFilterUnrelatedFilesIsFalse() {
+        scanExecutor.executeHandler = { "test" }
+        outputParser.parseHandler = { _ in
+            [
+                .init(filePath: "path1", line: 1, message: "1"),
+                .init(filePath: "path2", line: 2, message: "2"),
+            ]
+        }
+        diffProvider.diffHandler = { filePath in
+            switch filePath {
+            case "path1":
+                return .deleted(deletedLines: [])
+            case "path2":
+                return .renamed(oldPath: "", hunks: [])
+            default:
+                return .deleted(deletedLines: [])
+            }
+        }
+        let result = DangerPeriphery.scan(scanExecutor: scanExecutor,
+                                          outputParser: outputParser,
+                                          diffProvider: diffProvider,
+                                          filterUnrelatedFiles: false)
+        switch result {
+        case let .success(violationsForComment):
+            XCTAssertEqual(violationsForComment.count, 2)
         case .failure:
             XCTFail("Unexpected error")
         }

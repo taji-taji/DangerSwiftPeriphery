@@ -14,6 +14,9 @@ public enum DangerPeriphery {
     ///   - shouldComment:
     ///     Flag if you want to comment using Danger or not.
     ///     Set to false if you want to use the return value to create your own comments, for example.
+    ///   - filterUnrelatedFiles:
+    ///     Flag to determine whether to filter out files not affected by the current pull request.
+    ///     Set to true to focus on detecting violations in files that are part of the pull request's changes.
     ///   - verbose:
     ///     Set to true if logging is to be output.
     /// - Returns:
@@ -23,10 +26,12 @@ public enum DangerPeriphery {
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             @PeripheryScanOptionsBuilder arguments: () -> [String],
                             shouldComment: Bool = true,
+                            filterUnrelatedFiles: Bool = true,
                             verbose: Bool = false) -> Result<[Violation], Error> {
         scan(peripheryExecutable: peripheryExecutable,
              arguments: arguments(),
              shouldComment: shouldComment,
+             filterUnrelatedFiles: filterUnrelatedFiles,
              verbose: verbose)
     }
 
@@ -43,6 +48,9 @@ public enum DangerPeriphery {
     ///   - shouldComment:
     ///     Flag if you want to comment using Danger or not.
     ///     Set to false if you want to use the return value to create your own comments, for example.
+    ///   - filterUnrelatedFiles:
+    ///     Flag to determine whether to filter out files not affected by the current pull request.
+    ///     Set to true to focus on detecting violations in files that are part of the pull request's changes.
     ///   - verbose:
     ///     Set to true if logging is to be output.
     /// - Returns:
@@ -52,10 +60,12 @@ public enum DangerPeriphery {
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             arguments: [PeripheryScanOptions],
                             shouldComment: Bool = true,
+                            filterUnrelatedFiles: Bool = true,
                             verbose: Bool = false) -> Result<[Violation], Error> {
         scan(peripheryExecutable: peripheryExecutable,
              arguments: arguments.map { $0.optionString },
              shouldComment: shouldComment,
+             filterUnrelatedFiles: filterUnrelatedFiles,
              verbose: verbose)
     }
 
@@ -72,6 +82,9 @@ public enum DangerPeriphery {
     ///   - shouldComment:
     ///     Flag if you want to comment using Danger or not.
     ///     Set to false if you want to use the return value to create your own comments, for example.
+    ///   - filterUnrelatedFiles:
+    ///     Flag to determine whether to filter out files not affected by the current pull request.
+    ///     Set to true to focus on detecting violations in files that are part of the pull request's changes.
     ///   - verbose:
     ///     Set to true if logging is to be output.
     /// - Returns:
@@ -81,6 +94,7 @@ public enum DangerPeriphery {
     public static func scan(peripheryExecutable: String = "swift run periphery",
                             arguments: [String] = [],
                             shouldComment: Bool = true,
+                            filterUnrelatedFiles: Bool = true,
                             verbose: Bool = false) -> Result<[Violation], Error> {
         Logger.shared.verbose = verbose
 
@@ -95,7 +109,8 @@ public enum DangerPeriphery {
         // execute scan
         let result = self.scan(scanExecutor: scanExecutor,
                                outputParser: outputParser,
-                               diffProvider: danger)
+                               diffProvider: danger,
+                               filterUnrelatedFiles: filterUnrelatedFiles)
 
         // handle scan result
         handleScanResult(result, danger: danger, shouldComment: shouldComment)
@@ -107,11 +122,15 @@ public enum DangerPeriphery {
                      DP: PullRequestDiffProvidable>(
                         scanExecutor: PSE,
                         outputParser: OP,
-                        diffProvider: DP) -> Result<[Violation], Error> {
+                        diffProvider: DP,
+                        filterUnrelatedFiles: Bool
+                     ) -> Result<[Violation], Error> {
         Result {
             let output = try scanExecutor.execute()
             let allViolations = try outputParser.parse(xml: output)
-            let violationsForComment = allViolations.filter({ isViolationIncludedInInsertions($0, diffProvider: diffProvider) })
+            guard filterUnrelatedFiles else { return allViolations }
+            let violationsForComment = allViolations.filter { isViolationIncludedInInsertions($0, diffProvider: diffProvider)
+            }
             return violationsForComment
         }
     }
